@@ -22,7 +22,6 @@ Transcripts assembly and quantification: [StringTie](https://ccb.jhu.edu/softwar
 This is done with the ```cat``` linux command.
 
 ```
-
 cat D21_S1_L001_R1_001.fastq.gz D21_S1_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/D21_R1_concat.fastq.gz
 cat D22_S2_L001_R1_001.fastq.gz D22_S2_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/D22_R1_concat.fastq.gz
 cat L7_S4_L001_R1_001.fastq.gz L7_S4_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/L7_R1_concat.fastq.gz
@@ -38,55 +37,48 @@ cat S7_S7_L001_R1_001.fastq.gz S7_S7_L002_R1_001.fastq.gz > /Home/Bermuda/output
 
 #### Concatenate reverse R3
 
-cd /data/home/mass/tmass/rawdata20210721/210726_A00929_0394_BHG3TFDRXY/fastq/D20
-cat D20_S3_L001_R3_001.fastq.gz D20_S3_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/D20_R3_concat.fastq.gz
-cat D21_S1_L001_R3_001.fastq.gz D21_S1_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/D21_R3_concat.fastq.gz
-cat D22_S2_L001_R3_001.fastq.gz D22_S2_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/D22_R3_concat.fastq.gz
-cat L7_S4_L001_R3_001.fastq.gz L7_S4_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/L7_R3_concat.fastq.gz
-cat L8_S5_L001_R3_001.fastq.gz L8_S5_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/L8_R3_concat.fastq.gz
-cat L9_S6_L001_R3_001.fastq.gz L9_S6_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/L9_R3_concat.fastq.gz
-cat R13B_S11_L001_R3_001.fastq.gz R13B_S11_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/R13B_R3_concat.fastq.gz
-cat R15B_S12_L001_R3_001.fastq.gz R15B_S12_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/R15B_R3_concat.fastq.gz
-cat R33_S10_L001_R3_001.fastq.gz R33_S10_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/R33_R3_concat.fastq.gz
-cat S4_S8_L001_R3_001.fastq.gz S4_S8_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/S4_R3_concat.fastq.gz
-cat S5_S9_L001_R3_001.fastq.gz S5_S9_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/S5_R3_concat.fastq.gz
-cat S7_S7_L001_R3_001.fastq.gz S7_S7_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/S7_R3_concat.fastq.gz
+```
+cat D20_S3_L001_R3_001.fastq.gz D20_S3_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/D20_R3_concat.fastq.gz
+cat D21_S1_L001_R3_001.fastq.gz D21_S1_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/D21_R3_concat.fastq.gz
+cat D22_S2_L001_R3_001.fastq.gz D22_S2_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/D22_R3_concat.fastq.gz
+cat L7_S4_L001_R3_001.fastq.gz L7_S4_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/L7_R3_concat.fastq.gz
+cat L8_S5_L001_R3_001.fastq.gz L8_S5_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/L8_R3_concat.fastq.gz
+cat L9_S6_L001_R3_001.fastq.gz L9_S6_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/L9_R3_concat.fastq.gz
+cat R13B_S11_L001_R3_001.fastq.gz R13B_S11_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/R13B_R3_concat.fastq.gz
+cat R15B_S12_L001_R3_001.fastq.gz R15B_S12_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/R15B_R3_concat.fastq.gz
+cat R33_S10_L001_R3_001.fastq.gz R33_S10_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/R33_R3_concat.fastq.gz
+cat S4_S8_L001_R3_001.fastq.gz S4_S8_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/S4_R3_concat.fastq.gz
+cat S5_S9_L001_R3_001.fastq.gz S5_S9_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/S5_R3_concat.fastq.gz
+cat S7_S7_L001_R3_001.fastq.gz S7_S7_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/S7_R3_concat.fastq.gz
+```
 
-###Create and activate a conda environment
+#### Create and activate a conda environment
+
+```
 conda create -n newrnapipeline
 conda activate newrnapipeline
+```
 
-###Install all necessary programs within your conda environment
+#### Install all necessary programs within your conda environment
+
+```
 conda install -c bioconda hisat2
 conda install -c bioconda samtools
-conda install -c bioconda multiqc # I installed multiqc in a new environment called "multiqc_env" to avoi conflicts with other softwares in "newrnapipeline"
+conda install -c bioconda multiqc  
 conda install -c bioconda/label/broken trimmomatic
 conda install -c bioconda cutadapt
-conda install -c bioconda fastqc # I installed multiqc in the environment called "multiqc_env" to avoi conflicts with other softwares in "newrnapipeline"
+conda install -c bioconda fastqc 
 
 wget -c http://ccb.jhu.edu/software/stringtie/dl/stringtie-2.1.5.Linux_x86_64.tar.gz
 tar xzf stringtie-2.1.5.Linux_x86_64.tar.gz
-#cd ~/bin/
-#ln -s ~/src/stringtie-2.1.5.Linux_x86_64/stringtie
+```
 
+### Quality filtering 
 
+Run [`fastq-filter-PE_Conda_1_RUN1.sh`]() that performs quality filtering (run starting from argument 0, then 1,2,3 and 5). 
+Argument 2 calls for [`fastq-filter_Conda_job_1.sh`]() (this script has all the cutadapt and trimmomatics commands) and removes the adapters using the file [`adapters4d.fa`]().
 
-###### Quality filtering ######
-
-###Create and activate a conda environment
-conda create -n qualityfilt python=3   #with python 3.9.6
-conda activate qualityfilt #needed to use 'fastq-filter_Conda_job_1.sh'
-
-###Install all necessary programs within your conda environment
-conda install -c bioconda cutadapt  #needed to use 'fastq-filter_Conda_job_1.sh'
-conda install -c bioconda/label/broken trimmomatic  #needed to use 'fastq-filter_Conda_job_1.sh'
-
-Run 'fastq-filter-PE_Conda_1_RUN1.sh' that performs quality filtering (run starting from argument 0, then 1,2,3 and 5) #outside conda env
-Argument 2 calls for 'fastq-filter_Conda_job_1.sh' (this script has all the cutadapt and trimmomatics commands) and removes the adapters using the file 'adapters4d.fa'.
-
-
-
-###### Alignment of clean reads to reference genome ######
+### Alignment of the clean reads to _P. astreoides_ reference genome 
 
 #run the script StyHISAT2_3.sh (takes 1H and 30 min for 3 samples PE) that does the following:
 #1) Create a subdirectory within data for HISAT2 and symbolically link it your clean fastq files.
