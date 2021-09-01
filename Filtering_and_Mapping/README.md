@@ -1,10 +1,18 @@
 
-# useful links
-# https://davetang.org/muse/2017/10/25/getting-started-hisat-stringtie-ballgown/
-# https://github.com/echille/Mcapitata_OA_Developmental_Gene_Expression_Timeseries/blob/main/2-QC-Align-Assemble/mcap_rnaseq_analysis.md
+The following document contains the bioinformatic pipeline used for cleaning, aligning and assembling our raw RNA sequences.
 
+---
 
-###### Concatenate reads of different lines ######
+**Tools used**  
+Quality check: [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [MultiQC](https://multiqc.info/)  
+Quality trimming: [Fastp](https://github.com/OpenGene/fastp)  
+Alignment to reference genome: [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)  
+Preparation of alignment for assembly: [SAMtools](http://www.htslib.org/doc/samtools.html)  
+Transcript assembly and quantification: [StringTie](https://ccb.jhu.edu/software/stringtie/) 
+
+---
+
+### Concatenate reads from different lines 
 
 # concatenate forward R1
 cd /data/home/mass/tmass/rawdata20210721/210726_A00929_0394_BHG3TFDRXY/fastq/D20
