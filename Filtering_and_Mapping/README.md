@@ -4,32 +4,40 @@ The following document contains the bioinformatic pipeline used for cleaning, al
 ---
 
 **Tools used**  
+
 Quality check: [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [MultiQC](https://multiqc.info/)  
-Quality trimming: [Fastp](https://github.com/OpenGene/fastp)  
-Alignment to reference genome: [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)  
-Preparation of alignment for assembly: [SAMtools](http://www.htslib.org/doc/samtools.html)  
-Transcript assembly and quantification: [StringTie](https://ccb.jhu.edu/software/stringtie/) 
+Quality trimming: [Cutadapt](https://cutadapt.readthedocs.io/en/stable/), [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic)  
+Alignment to the reference genome: [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)  
+Preparation of alignment for the assembly: [SAMtools](http://www.htslib.org/doc/samtools.html)  
+Transcripts assembly and quantification: [StringTie](https://ccb.jhu.edu/software/stringtie/) 
 
 ---
 
 ### Concatenate reads from different lines 
 
-# concatenate forward R1
-cd /data/home/mass/tmass/rawdata20210721/210726_A00929_0394_BHG3TFDRXY/fastq/D20
-cat D21_S1_L001_R1_001.fastq.gz D21_S1_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/D21_R1_concat.fastq.gz
-cd /data/home/mass/tmass/rawdata20210721/210726_A00929_0394_BHG3TFDRXY/fastq/D22
-cat D22_S2_L001_R1_001.fastq.gz D22_S2_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/D22_R1_concat.fastq.gz
-cat L7_S4_L001_R1_001.fastq.gz L7_S4_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/L7_R1_concat.fastq.gz
-cat L8_S5_L001_R1_001.fastq.gz L8_S5_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/L8_R1_concat.fastq.gz
-cat L9_S6_L001_R1_001.fastq.gz L9_S6_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/L9_R1_concat.fastq.gz
-cat R13B_S11_L001_R1_001.fastq.gz R13B_S11_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/R13B_R1_concat.fastq.gz
-cat R15B_S12_L001_R1_001.fastq.gz R15B_S12_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/R15B_R1_concat.fastq.gz
-cat R33_S10_L001_R1_001.fastq.gz R33_S10_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/R33_R1_concat.fastq.gz
-cat S4_S8_L001_R1_001.fastq.gz S4_S8_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/S4_R1_concat.fastq.gz
-cat S5_S9_L001_R1_001.fastq.gz S5_S9_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/S5_R1_concat.fastq.gz
-cat S7_S7_L001_R1_001.fastq.gz S7_S7_L002_R1_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/S7_R1_concat.fastq.gz
+[Design table]() with samples list.
 
-# concatenate reverse R3
+#### Concatenate forward R1
+
+This is done with the ```cat``` linux command.
+
+```
+
+cat D21_S1_L001_R1_001.fastq.gz D21_S1_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/D21_R1_concat.fastq.gz
+cat D22_S2_L001_R1_001.fastq.gz D22_S2_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/D22_R1_concat.fastq.gz
+cat L7_S4_L001_R1_001.fastq.gz L7_S4_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/L7_R1_concat.fastq.gz
+cat L8_S5_L001_R1_001.fastq.gz L8_S5_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/L8_R1_concat.fastq.gz
+cat L9_S6_L001_R1_001.fastq.gz L9_S6_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/L9_R1_concat.fastq.gz
+cat R13B_S11_L001_R1_001.fastq.gz R13B_S11_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/R13B_R1_concat.fastq.gz
+cat R15B_S12_L001_R1_001.fastq.gz R15B_S12_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/R15B_R1_concat.fastq.gz
+cat R33_S10_L001_R1_001.fastq.gz R33_S10_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/R33_R1_concat.fastq.gz
+cat S4_S8_L001_R1_001.fastq.gz S4_S8_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/S4_R1_concat.fastq.gz
+cat S5_S9_L001_R1_001.fastq.gz S5_S9_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/S5_R1_concat.fastq.gz
+cat S7_S7_L001_R1_001.fastq.gz S7_S7_L002_R1_001.fastq.gz > /Home/Bermuda/output/concat/S7_R1_concat.fastq.gz
+```
+
+#### Concatenate reverse R3
+
 cd /data/home/mass/tmass/rawdata20210721/210726_A00929_0394_BHG3TFDRXY/fastq/D20
 cat D20_S3_L001_R3_001.fastq.gz D20_S3_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/D20_R3_concat.fastq.gz
 cat D21_S1_L001_R3_001.fastq.gz D21_S1_L002_R3_001.fastq.gz > /data/home/mass/fscucchia/Bermuda/output/concat/D21_R3_concat.fastq.gz
