@@ -52,14 +52,14 @@ cat S5_S9_L001_R3_001.fastq.gz S5_S9_L002_R3_001.fastq.gz > /Home/Bermuda/output
 cat S7_S7_L001_R3_001.fastq.gz S7_S7_L002_R3_001.fastq.gz > /Home/Bermuda/output/concat/S7_R3_concat.fastq.gz
 ```
 
-#### Create and activate a conda environment
+#### Create and activate a new conda environment
 
 ```
 conda create -n newrnapipeline
 conda activate newrnapipeline
 ```
 
-#### Install all necessary programs within your conda environment
+#### Install all necessary programs within your new conda environment
 
 ```
 conda install -c bioconda hisat2
@@ -75,8 +75,7 @@ tar xzf stringtie-2.1.5.Linux_x86_64.tar.gz
 
 ### Quality filtering 
 
-Run [`fastq-filter-PE_Conda_1_RUN1.sh`]() that performs quality filtering (run starting from argument 0, then 1,2,3 and 5). 
-Argument 2 calls for [`fastq-filter_Conda_job_1.sh`]() (this script has all the cutadapt and trimmomatics commands) and removes the adapters using the file [`adapters4d.fa`]().
+Run [`fastq-filter-PE_Conda_1_RUN1.sh`]() that performs quality filtering. Argument 1 uses FastQC to perform the initial quality check of raw reads. Argument 2 calls for the script [`fastq-filter_Conda_job_1.sh`](), which contains all the cutadapt and trimmomatics commands, and removes the adapters using the file [`adapters4d.fa`](). Argument 3 uses FastQC to perform the quality check of the filtered reads. Argument 4 compiles the MultiQC report. 
 
 ### Alignment of the clean reads to _P. astreoides_ reference genome 
 
