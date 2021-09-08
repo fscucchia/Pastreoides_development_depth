@@ -37,9 +37,10 @@ wget "https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Trinotate_v
 ```
 conda install -c bioconda kofamscan
 ```
-- KofamScan requires:
+
+   - KofamScan requires:
         
-        - Ruby >= 2.4 (https://www.ruby-lang.org/en/documentation/installation/#building-from-source)
+        - [Ruby](https://www.ruby-lang.org/en/documentation/installation/#building-from-source) >= 2.4 
         ```
            ./configure --prefix=/data/home/mass/fscucchia/programs/ruby_installed
            make
