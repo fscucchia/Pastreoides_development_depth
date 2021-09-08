@@ -79,87 +79,11 @@ Run [`fastq-filter-PE_Conda_1_RUN1.sh`]() that performs quality filtering. Argum
 
 ### Alignment of the clean reads to _P. astreoides_ reference genome 
 
-#run the script StyHISAT2_3.sh (takes 1H and 30 min for 3 samples PE) that does the following:
-#1) Create a subdirectory within data for HISAT2 and symbolically link it your clean fastq files.
-mkdir hisat2
-cd hisat2
-ln -s /data/home/mass/fscucchia/pH_exp_1/filtered/*filtered.gz* ./
-#2) Index the reference genome in the reference directory and alignment (calling for the script 'StyHISAT2.sh')
-cd /data/home/mass/fscucchia/pH_exp_1/ref_genome
-hisat2-build -f /data/home/mass/fscucchia/pH_exp_1/ref_genome/smic_stylophoraP_concat.fasta ./Sty_ref
 
-#StyHISAT2.sh:
 
-   F="/data/home/mass/fscucchia/pH_exp_1/filtered"
-   #Aligning paired end reads
-   #Has the R1 in array1 because the sed in the for loop changes it to an R2. SAM files are of both forward and reverse reads
-   array1=($(ls $F/*_R1_001.fastq.gz.filtered.gz))
-
-   # This then makes it into a bam file
-   # And then also sorts the bam file because Stringtie takes a sorted file for input
-   # And then removes the sam file because I don't need it anymore
-
-   for i in ${array1[@]}; do
-        hisat2 -p 8 --rf --dta -q -x Sty_ref -1 ${i} -2 $(echo ${i}|sed s/_R1/_R2/) -S ${i}.sam
-        samtools sort -@ 8 -o ${i}.bam ${i}.sam
-    		echo "${i}_bam"
-        rm ${i}.sam
-        echo "HISAT2 PE ${i}" $(date)
-   done
-
-#after running the script I got this message "Warning: Unsupported file format", not sure what is the problem here
-
-#after the alignment of the first sample, I got this message "samtools: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: No such file or directory"
-#so I ran these 3 commands: conda config --add channels bioconda
-                           #conda config --add channels conda-forge
-                           #conda install samtools==1.11
-
-#created a new script StyHISAT2_4.sh to get the multiqc at the end of the mapping. This script calls for StyHISAT_withSummary.sh, which has the command --summary-file ${i}.txt 
-#to make a summary file per sample, which will be used by multiqc. StyHISAT_withSummary.sh needs to be in the same directory as the ref_genome to work.
+### Assemble aligned reads and quantify transcripts 
 
 
 
-### Assemble aligned reads and quantify transcripts ###
-#First, create and enter into StringTie directory. 
-mkdir ../stringtie
-cd stringtie
+### Assess the performance of the assembly 
 
-#run the script 'StySTRINGTIE.sh' (takes 18 min for 3 samples PE) that does the following:
-#1) Create a symbolic link to our reference genome (in .gtf format) inside the stringtie directory
-ln -s /data/home/mass/fscucchia/pH_exp_1/ref_genome/smic_stylophoraP_concat.gtf ./
-#2) then it runs the script StyStringTie_assembly.sh:
-
-  ##!/bin/bash
-
-  #Specify working directory
-  W="/data/home/mass/fscucchia/pH_exp_1/filtered"
-
-  #StringTie reference-guided assembly
-  #Has the R1 in array1 because of the naming convention in the former script. However, these BAM files contain both forward and reverse reads.
-  array1=($(ls $W/*_R1_001.fastq.gz.filtered.gz.bam))
-
-  for i in ${array1[@]}; do
-        stringtie -A gene_abundance/{i}.gene_abund.tab -p 8 --rf -e -G smic_stylophoraP_concat.gtf -o ${i}.gtf ${i}
-        mv /ref-guided-gtfs/${i}.gtf /data/home/mass/fscucchia/pH_exp_1/output/stringtie/BAM
-        echo "StringTie-assembly-to-ref ${i}" $(date)
-  done
-
-
-
-### Assess the performance of the assembly ###
-#First, install gffcompare within your conda environment
-conda activate newrnapipeline
-conda install -c bioconda gffcompare
-
-#Then create the .txt file, list_to_merge.txt. This file lists all of the file names to be merged. This file is in the StringTie directory.
-#Run the script 'Stringtie_merge_compare_count.sh', which does the following:
-#1) merge the assembly-generated GTF files to assess how well the predicted transcripts track to the reference annotation file
-stringtie --merge -p 8 -G /data/home/mass/fscucchia/pH_exp_1/ref_genome/smic_stylophoraP_concat.gtf -o ../stringtie_merged.gtf list_to_merge.txt
-#2) use the program gffcompare to compare the merged GTF to our reference genome
-gffcompare -r /data/home/mass/fscucchia/pH_exp_1/ref_genome/smic_stylophoraP_concat.gtf -o ../compared stringtie_merged.gtf
-    #Manually move all of the gffcompare output files to a separate directory "/data/home/mass/fscucchia/pH_exp_1/output/Gffcompare"
-#3) Compilation of GTF-files into gene and transcript count matrices
-#The StringTie program includes a script, prepDE.py that compiles your assembly files into gene and transcript count matrices. This script requires 
-#as input the list of sample names and their full file paths, sample_list.txt. This file will live in StringTie program directory.
-./prepDE.py -g ../gene_count_matrix.csv -i ./sample_list.txt
-    #Manually move the 'gene_count_matrix.csv' and 'transcript_count_matrix.csv' files to a separate directory "/data/home/mass/fscucchia/pH_exp_1/output/count_matrix"
