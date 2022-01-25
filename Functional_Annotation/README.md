@@ -19,44 +19,6 @@ wget http://github.com/bbuchfink/diamond/releases/download/v2.0.11/diamond-linux
 tar xzf diamond-linux64.tar.gz
 ```
 
-- [Trinotate](https://informatics.fas.harvard.edu/trinotate-workflow-example-on-odyssey.html)
-```
-wget https://github.com/Trinotate/Trinotate/archive/v2.0.2.tar.gz -O Trinotate-2.0.2.tar.gz
-tar xvf Trinotate-2.0.2.tar.gz
-
-wget https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Trinotate_v2.0_RESOURCES/uniprot_sprot.trinotate_v2.0.pep.gz
-wget https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Trinotate_v2.0_RESOURCES//Pfam-A.hmm.gz
-wget "https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Trinotate_v2.0_RESOURCES/Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz" -O Trinotate.sqlite.gz
-```
-
-- [InterProScan](https://github.com/ebi-pf-team/interproscan) v.5.46-81.0
-    - Requires Java v11.0.2
-<followed the instructions [here](https://interproscan-docs.readthedocs.io/en/latest/UserDocs.html#obtaining-a-copy-of-interproscan)>    
-
-- [KofamScan](https://github.com/takaram/kofam_scan) v1.3.0
-```
-conda install -c bioconda kofamscan
-```
-
-   - KofamScan requires:
-        
-        - [Ruby](https://www.ruby-lang.org/en/documentation/installation/#building-from-source) >= 2.4 
-        ```
-           ./configure --prefix=/data/home/mass/fscucchia/programs/ruby_installed
-           make
-           make install
-        ```   
-
-        - GNU parallel
-        <compiled from [source](https://medium.com/analytics-vidhya/simple-tutorial-to-install-use-gnu-parallel-79251120d618)>
-
-        - util-linux v2.34
-        
-        - HMMER >= 3.1
-        ```
-           conda install -c bioconda hmmer
-        ```   
-
 ### Step 1: Find homologous sequences
 
 #### Download/Update nr database
@@ -86,31 +48,12 @@ diamond blastx -d /data/putnamlab/shared/databases/nr.dmnd -q ../data/ref/Mcap.m
 
 ### Step 2: Map Gene ontology terms to genome  
 
-#### InterProScan
+#### Uniprot
 
-As input, InterProScan requires reference protein sequences. 
-
-*Note: Many fasta files willl use an asterisk to denote a STOP codon. InterProScan does not accept special characters within the sequences, so I removed them prior to running the program using the code below:*
-
-```
-cp Mcap.protein.fa ./Mcap.IPSprotein.fa
-sed -i 's/*//g' Mcap.IPSprotein.fa
-```
-
-**Interproscan.sh: Executes the InterProScan Program**
-
-```
-interproscan.sh -version
-interproscan.sh -f XML -i ../data/ref/Mcap.IPSprotein.fa -b ./Mcap.interpro.200824  -iprlookup -goterms -pa 
-```
-
-#### Trinotate
+#### EggNog
 
 Place the Trinotate.sqlite database in the working directory
 
-### Step 3: Map Kegg terms to genome  
-*Uses KofamScan*
-
-### Step 4: Compilation of the output of different methods
+### Step 3: Compilation of the output of different methods
 
 Done in RStudio.

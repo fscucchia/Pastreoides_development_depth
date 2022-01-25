@@ -1,5 +1,5 @@
 
-The following document contains the bioinformatic pipeline used for cleaning, aligning and assembling our raw RNA sequences.
+The following document contains the bioinformatic pipeline used for cleaning, aligning and assembling _P. astreoides_ raw RNA sequences.
 
 ---
 
