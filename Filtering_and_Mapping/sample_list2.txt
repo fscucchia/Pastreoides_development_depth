@@ -1,0 +1,13 @@
+D20 /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/D20_R1_concat.fastq.gz.filtered.bam.gtf
+D21 /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/D21_R1_concat.fastq.gz.filtered.bam.gtf
+D22 /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/D22_R1_concat.fastq.gz.filtered.bam.gtf
+L7 /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/L7_R1_concat.fastq.gz.filtered.bam.gtf
+L8 /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/L8_R1_concat.fastq.gz.filtered.bam.gtf
+L9 /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/L9_R1_concat.fastq.gz.filtered.bam.gtf
+R13B /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/R13B_R1_concat.fastq.gz.filtered.bam.gtf
+R15B /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/R15B_R1_concat.fastq.gz.filtered.bam.gtf
+R33 /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/R33_R1_concat.fastq.gz.filtered.bam.gtf
+S4 /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/S4_R1_concat.fastq.gz.filtered.bam.gtf
+S5 /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/S5_R1_concat.fastq.gz.filtered.bam.gtf
+S7 /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM/S7_R1_concat.fastq.gz.filtered.bam.gtf
+
