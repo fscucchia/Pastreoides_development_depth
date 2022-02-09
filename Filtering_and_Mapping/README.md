@@ -80,7 +80,7 @@ Run [`MultiQC.sh`](https://github.com/fscucchia/Pastreoides_development_depth/bl
 
 ### Alignment of the clean reads to _P. astreoides_ reference genome 
 
-Create a new directory for Hisat
+Create a new directory for Hisat.
 ```
 mkdir HISAT
 ```
@@ -128,7 +128,57 @@ So I ran these 3 commands: $ conda config --add channels bioconda
 
 ### Assemble aligned reads and quantify transcripts 
 
+Create a new directory for StringTie. 
+```
+mkdir StringTie
+```
+Run the script [`StySTRINGTIE.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/Filtering_and_Mapping/StySTRINGTIE.sh)(takes 1 hour and 44 minutes for 12 samples PE) that does the following:
+1) Creates a symbolic link to the reference genome gff file inside the stringtie directory
+```
+ln -s /data/home/mass/fscucchia/databases/Pastreoides_genome_KW/Pastreoides_all_v1.gff.zip ./
+```
+2) Runs the script [`StyStringTie_assembly.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/Filtering_and_Mapping/StyStringTie_assembly.sh) to assemble the aligned reads and quantify transcripts:
+```
+  ##!/bin/bash
 
+  #Specify working directory
+  W="/data/home/mass/fscucchia/Bermuda/output/filtered"
+
+  #StringTie reference-guided assembly
+  #These BAM files contain both forward and reverse reads
+  array1=($(ls $W/*_R1_concat.fastq.gz.filtered.bam))
+
+  for i in ${array1[@]}; do
+        stringtie -A gene_abundance/{i}.gene_abund.tab -p 8 --rf -e -G Pastreoides_all_v1.gff.zip -o ${i}.gtf ${i}
+        mv /filtered/${i}.gtf /data/home/mass/fscucchia/Bermuda/output/StringTie/BAM
+        echo "StringTie-assembly-to-ref ${i}" $(date)
+  done
+```
 
 ### Assess the performance of the assembly 
 
+Install gffcompare within your conda environment.
+```
+conda activate newrnapipeline
+conda install -c bioconda gffcompare
+```
+Then create a .txt file ([`list_to_merge.txt`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/Filtering_and_Mapping/list_to_merge.txt)) listing all of the file names to be merged. This file needs to be in the StringTie directory.
+
+Run the script [`Stringtie_merge_compare_count.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/Filtering_and_Mapping/Stringtie_merge_compare_count.sh), which does the following:
+1) Merges the GTF files generated from the assembly to assess how well the predicted transcripts track to the reference annotation gff file.
+```
+stringtie --merge -p 8 -G /data/home/mass/fscucchia/databases/Pastreoides_genome_KW/Pastreoides_all_v1.gff -o ../stringtie_merged.gtf list_to_merge.txt
+```
+2) Uses the program gffcompare to compare the merged GTF files to the reference genome.
+```
+gffcompare -r /data/home/mass/fscucchia/databases/Pastreoides_genome_KW/Pastreoides_all_v1.gff -o ../compared stringtie_merged.gtf
+```
+3) Compiles the GTF files into gene and transcript count matrices. The StringTie program includes the script `prepDE.py` that compiles the assembly-generated files into gene and transcript count matrices. This script requires as input a list of sample names and their file paths which has to be manually created. This .txt file ([`sample_list.txt.`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/Filtering_and_Mapping/sample_list.txt)) needs to be in the StringIie directory.
+```
+./prepDE.py -g ../gene_count_matrix.csv -i ./sample_list.txt
+```
+<details>
+<summary>Troubleshooting tips!</summary>
+<br>
+I got syntax related-errors when running the ./prepDE.py with python3. So I used '$ module load python/2.7' to run the script.                     
+</details>
