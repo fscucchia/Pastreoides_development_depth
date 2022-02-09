@@ -1,0 +1,12 @@
+D20	./BAM/D20_R1_concat.fastq.gz.filtered.bam.gtf
+D21	./BAM/D21_R1_concat.fastq.gz.filtered.bam.gtf
+D22	./BAM/D22_R1_concat.fastq.gz.filtered.bam.gtf
+L7	./BAM/L7_R1_concat.fastq.gz.filtered.bam.gtf
+L8	./BAM/L8_R1_concat.fastq.gz.filtered.bam.gtf
+L9	./BAM/L9_R1_concat.fastq.gz.filtered.bam.gtf
+R13B	./BAM/R13B_R1_concat.fastq.gz.filtered.bam.gtf
+R15B	./BAM/R15B_R1_concat.fastq.gz.filtered.bam.gtf
+R33	./BAM/R33_R1_concat.fastq.gz.filtered.bam.gtf
+S4	./BAM/S4_R1_concat.fastq.gz.filtered.bam.gtf
+S5	./BAM/S5_R1_concat.fastq.gz.filtered.bam.gtf
+S7	./BAM/S7_R1_concat.fastq.gz.filtered.bam.gtf
