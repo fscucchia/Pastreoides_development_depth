@@ -113,7 +113,7 @@ hisat2-build -f /data/home/mass/fscucchia/databases/Pastreoides_genome_KW/past_f
         echo "HISAT2 PE ${i}" $(date)
    done
 ```
-3) Runs multiqc at the end of mapping if the `--summary-file` option was enabled.
+3) Runs multiqc at the end of mapping if the `--summary-file` option was enabled. The [multiqc](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/Filtering_and_Mapping/output/multiqc_report.html) reports the % alignment per each sample.
 
 <details>
 <summary>Troubleshooting tips!</summary>
