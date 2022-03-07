@@ -57,7 +57,6 @@ $ diamond dbinfo -d nr.dmnd
 
 ###### Run diamond and heatmap ######
 ```
-$ cd /data/home/mass/tmass/jbellworthy/scripts
 $ bash diamond2_RUN2.sh 1
 ```
 
