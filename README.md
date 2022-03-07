@@ -12,3 +12,5 @@ In progress... 😁👩🏻‍💻
 ### Differential expression
 
 **[Coral host differential expression](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/DE)** - DE analysis was conducted using Bioconductor DEseq2 v1.30.1 ([Love et al., 2014](https://doi.org/10.1186/s13059-014-0550-8))...
+
+### Species identification
