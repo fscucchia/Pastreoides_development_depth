@@ -1,4 +1,4 @@
-### RNAseq Differential Expression Analysis of _P. astreoides_ larvae and adults ######
+## RNAseq Differential Expression Analysis of _P. astreoides_ larvae and adults ######
 
 ### Set up workspace in R 
 
@@ -28,8 +28,8 @@ gcount <- as.data.frame(read.csv("gene_count_matrix.csv", row.names="gene_id")) 
 dim(gcount)
 head(gcount)
 ```
-#### Construct DESeq2 dataset
-### Pre-filter gene counts
+### Construct DESeq2 dataset
+#### Pre-filter gene counts
 Pre-filtering our dataset to reduce the memory size dataframe, increase the speed of the transformation and improve sensitivity of statistical analysis by removing low-coverage counts. 
 
 ```
