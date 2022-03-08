@@ -1,4 +1,4 @@
-### RNAseq Differential Expression Analysis of _P. astreoides_ samples ######
+### RNAseq Differential Expression Analysis of _P. astreoides_ larvae and adults ######
 
 ### Set up workspace in R 
 
