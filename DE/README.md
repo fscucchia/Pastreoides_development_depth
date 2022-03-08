@@ -29,7 +29,7 @@ dim(gcount)
 head(gcount)
 ```
 #### Construct DESeq2 dataset
-# Pre-filter gene counts
+### Pre-filter gene counts
 Pre-filtering our dataset to reduce the memory size dataframe, increase the speed of the transformation and improve sensitivity of statistical analysis by removing low-coverage counts. 
 
 ```
