@@ -29,3 +29,23 @@ dim(gcount)
 head(gcount)
 ```
 #### Construct DESeq2 dataset
+# Pre-filter gene counts
+Pre-filtering our dataset to reduce the memory size dataframe, increase the speed of the transformation and improve sensitivity of statistical analysis by removing low-coverage counts. 
+
+```
+#Set filter values for PoverA: smallest sample size per treat. is 3, so 3/12 (12 samples) is 0.25. 
+#This means that 3 out of 12 (0.25) samples need to have counts over 10. So P=25 percent of the samples have counts over A=10. 
+filt <- filterfun(pOverA(0.25,10))
+
+#create filter for the counts data
+gfilt <- genefilter(gcount, filt)
+
+#identify genes to keep by count filter
+gkeep <- gcount[gfilt,]
+
+#identify gene lists
+gn.keep <- rownames(gkeep)
+
+#gene count data filtered in PoverA, P percent of the samples have counts over A
+gcount_filt <- as.data.frame(gcount[which(rownames(gcount) %in% gn.keep),])
+```
