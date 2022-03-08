@@ -48,4 +48,16 @@ gn.keep <- rownames(gkeep)
 
 #gene count data filtered in PoverA, P percent of the samples have counts over A
 gcount_filt <- as.data.frame(gcount[which(rownames(gcount) %in% gn.keep),])
+
+#Merge the age and depth columns into a new column, group. Set group as a factor.
+treatmentinfo$group <- factor(treatmentinfo$group, levels = c("adult_meso","adult_shal","planu_meso", "planu_shal"))
+
+#Create a DESeqDataSet design from gene count matrix and labels. Here we set the design to look at the interaction of age and depth to test for any differences in gene #expression across samples attributed to depth and developmental stage.
+
+#Set DESeq2 design
+gdds <- DESeqDataSetFromMatrix(countData = gcount_filt,
+                                  colData = treatmentinfo,
+                                  design = ~group)
 ```
+
+#### Visualize gene count data
