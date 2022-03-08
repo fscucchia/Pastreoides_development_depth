@@ -61,3 +61,14 @@ gdds <- DESeqDataSetFromMatrix(countData = gcount_filt,
 ```
 
 #### Visualize gene count data
+```{r}
+## Log-transform the count data
+#Log-transform the data using a variance stabilizing transforamtion (vst) for visualization purposes. This transformation deals with the sampling variability of low counts by #calculating within-group variability.  
+
+#To use vst we first need to calculate the size factors of the samples, that is an estimate of how many reads each sample has compared to the others. 
+SF.gdds <- estimateSizeFactors(gdds) #size factors should be less than for to use vst
+print(sizeFactors(SF.gdds)) #View size factors. In this case size factors are all less than 4, so vst can be used.
+
+gvst <- vst(gdds, blind=FALSE) 
+
+### Principal component plot of samples
