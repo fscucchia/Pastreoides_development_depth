@@ -2,7 +2,7 @@
 
 This electronic notebook provides the scripts employed to analyze gene expression dynamics across developmental stages (larvae and adults) of the coral _Porites astreoides_ inhabiting shallow (10 m) and mesophotic (45 m) reefs in Bermuda.
 
-In progress... 😁👩🏻‍💻
+In progress...👩🏻‍💻
 
 
 ### RNA-Seq reads quality filtering and mapping
@@ -17,4 +17,5 @@ In progress... 😁👩🏻‍💻
 
 **[Coral host differential expression](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/DE)** - DE analysis was conducted using Bioconductor DEseq2 v1.30.1 ([Love et al., 2014](https://doi.org/10.1186/s13059-014-0550-8))...
 
-
+### Weighted correlation network analysis
+**[Coral host WGCNA](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/WGCNA)**
