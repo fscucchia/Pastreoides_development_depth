@@ -1,6 +1,6 @@
-## RNAseq Differential Expression Analysis of _P. astreoides_ larvae and adults ######
+## RNAseq Differential Expression Analysis of _P. astreoides_ planulae and adult samples from shallow and mesophotic reefs ######
 
-### Set up workspace in R 
+### Set up workspace in R Studio
 
 ```{r}
 # Load libraries
@@ -18,14 +18,13 @@ library("VennDiagram")          #install.packages("VennDiagram")
 library("patchwork")            #install.packages("patchwork")
 library("dplyr")
 
-#treatment information
+#load treatment information
 treatmentinfo <- read.csv("RNAseq_data2.csv", header = TRUE, sep = ";")
 str(treatmentinfo)
 head(treatmentinfo)
 
-#gene count matrix
+#load gene count matrix
 gcount <- as.data.frame(read.csv("gene_count_matrix.csv", row.names="gene_id")) #the gene_count_matrix.csv is the output of Stringtie
-dim(gcount)
 head(gcount)
 ```
 ### Construct DESeq2 dataset
