@@ -322,8 +322,8 @@ ggsave(file = "meso_PCA_vst.png", PCA_meso)
 ### Differential Gene Expression Analysis 
 
 #### Run DE analysis
-
-#DESEq2 itrnally applies the median of ratios method for normalization.
+```{r}
+#DESEq2 internally applies the median of ratios method for normalization.
 DEG_adult <- DESeq(gdds_adult) #run differential expression test by group using the Wald model
 
 #Explore significant p-values for meso and shallow adults
