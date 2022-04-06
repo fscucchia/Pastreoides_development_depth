@@ -469,9 +469,144 @@ write.csv(DEG_shallow.results, "DEGs_shal_planulae_vs_adults_ALL.csv")
 head(DEG_shallow.results)
 sum(DEG_shallow.results$padj < 0.05, na.rm=TRUE)  #10664 genes
 
+#save list of DEGs
 DEGs_shallow <- as.data.frame(subset(DEG_shallow.results, padj<0.05))
 DEGs_shallow_ordered <- order(DEGs_shallow$padj) #Order p-values by smallest value first
 DEGs_shallow$contrast <- as.factor(c("shallow_planulae_vs_adults"))
 DEGs_shallow$gene_id  <- rownames(DEGs_shallow)
 rownames(DEGs_shallow) <- NULL
 write.csv(DEGs_shallow, "DEGs_shal_planulae_vs_adults.csv")
+
+### Volcano plot 
+# Volcano Plot (significance as a function of fold change)
+par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
+topT <- as.data.frame(DEG_shallow.results)
+#Adjusted P values (FDR Q values)
+with(topT, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value (pajd))))
+#Color the significant points 
+with(subset(topT, padj<0.05), points(log2FoldChange, -log10(padj), pch=20, col="red", cex=0.5))
+```
+#### Plot DEGs 
+```{r}
+#identify signficant pvalues with 5%FDR
+DEG_shallow.results$gene_id  <- rownames(gdds_shallow)
+sig_shallow <- subset(DEG_shallow.results, padj<0.05,)
+rownames(sig_shallow) <- sig_shallow[,7] #rename rownames of sig_shallow as column 7
+#subset list of sig transcripts from original count data
+sig.list.shallow <- gdds_shallow[which(rownames(gdds_shallow) %in% rownames(sig_shallow)),]
+
+
+#apply a vst transformation to minimize effects of small counts and normalize wrt library size
+gdds_shallow <- estimateSizeFactors(gdds_shallow) 
+print(sizeFactors(gdds_shallow)) 
+rsig <- vst(sig.list.shallow, blind=FALSE)
+
+PCA.sig.shallow <- plotPCA(rsig, intgroup="age")#Plot PCA of all samples for DEG only
+PCA.sig.shallow #view plot
+
+pdf(file="PCA_sigDEGs_shallow.pdf")
+PCA.sig.shallow #view plot
+dev.off()
+
+### Heatmap 
+#make an expression object
+#difference in expression compared to average across all samples
+library(pheatmap)
+Sym.mat <- assay(rsig)
+Sym.mat <- Sym.mat - rowMeans(Sym.mat)
+Sym.df <- data.frame(colData(rsig)[c("age")])
+colors = met.brewer("OKeeffe1",n=15,type="continuous", direction=-1)
+
+pdf(file="SigDEGs_Heatmap_shallow_changeColors.pdf")
+pheatmap(Sym.mat, annotation_col = Sym.df, clustering_method = "average",
+         clustering_distance_rows="euclidean", 
+         color=colors,
+         show_rownames =FALSE, cluster_cols=TRUE,
+         show_colnames =TRUE) #plot heatmap of all DEG by group
+
+dev.off()
+```
+
+#### Run DE analysis - Mesophotic samples
+```{r}
+DEG_meso <- DESeq(gdds_meso) #run differential expression test by group using the Wald model
+
+DEG_meso.results <- results(DEG_meso, contrast= c("age","planulae","adult"))  #adult is the reference
+write.csv(DEG_meso.results, "DEGs_meso_planulae_vs_adults_ALL.csv")
+head(DEG_meso.results)
+sum(DEG_meso.results$padj < 0.05, na.rm=TRUE)  #8257 genes
+
+#save list of DEGs
+DEGs_meso <- as.data.frame(subset(DEG_meso.results, padj<0.05))
+DEGs_meso_ordered <- order(DEGs_meso$padj) #Order p-values by smallest value first
+DEGs_meso$contrast <- as.factor(c("meso_planulae_vs_adults"))
+DEGs_meso$gene_id  <- rownames(DEGs_meso)
+rownames(DEGs_meso) <- NULL
+write.csv(DEGs_meso, "DEGs_meso_planulae_vs_adults.csv")
+
+###Volcano plot 
+# Volcano Plot (significance as a function of fold change)
+par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
+topT <- as.data.frame(DEG_meso.results)
+#Adjusted P values (FDR Q values)
+with(topT, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value (pajd))))
+#Color the significant points 
+with(subset(topT, padj<0.05), points(log2FoldChange, -log10(padj), pch=20, col="red", cex=0.5))
+```
+#### Plot DEGs 
+```{r}
+###### Plot DEGs 
+#identify signficant pvalues with 5%FDR
+DEG_meso.results$gene_id  <- rownames(gdds_meso)
+sig_meso <- subset(DEG_meso.results, padj<0.05,)
+rownames(sig_meso) <- sig_meso[,7] #rename rownames of sig_meso as column 7
+#subset list of sig transcripts from original count data
+sig.list.meso <- gdds_meso[which(rownames(gdds_meso) %in% rownames(sig_meso)),]
+
+
+#apply a vst transformation to minimize effects of small counts and normalize wrt library size
+gdds_meso <- estimateSizeFactors(gdds_meso) 
+print(sizeFactors(gdds_meso)) 
+rsig <- vst(sig.list.meso, blind=FALSE)
+
+PCA.sig.meso <- plotPCA(rsig, intgroup="age")#Plot PCA of all samples for DEG only
+PCA.sig.meso #view plot
+
+pdf(file="PCA_sigDEGs_mesophotic.pdf")
+PCA.sig.meso #view plot
+dev.off()
+
+### Heatmap 
+#make an expression object
+#difference in expression compared to average across all samples
+library(pheatmap)
+Sym.mat <- assay(rsig)
+Sym.mat <- Sym.mat - rowMeans(Sym.mat)
+Sym.df <- data.frame(colData(rsig)[c("age")])
+pdf(file="SigDEGs_Heatmap_mesophotic_changeColors.pdf")
+pheatmap(Sym.mat, annotation_col = Sym.df, clustering_method = "average",
+         clustering_distance_rows="euclidean", 
+         color=colors,
+         show_rownames =FALSE, cluster_cols=TRUE,
+         show_colnames =TRUE) #plot heatmap of all DEG by group
+
+dev.off()
+
+
+#### merge all DEGs tables
+DEGs_all <- bind_rows(DEGs_adult, DEGs_planulae, DEGs_shallow, DEGs_meso)
+```
+
+### Visualize differentially-expressed genes: ADULTS
+```{r}
+#### Subset and Log-transform the count data
+#Subset the gene count matrix by the list of DEGs
+DEG_adult.results$gene_id  <- rownames(gdds_adult)
+sig_adults <- subset(DEG_adult.results, padj<0.05,)
+rownames(sig_adults) <- sig_adults[,7] #rename rownames of sig_adults as column 7
+#subset list of sig transcripts from original count data
+sig.list.adults <- gdds_adult[which(rownames(gdds_adult) %in% rownames(sig_adults)),]
+
+#apply a rlog transformation to minimize effects of small counts and normalize wrt library size
+rsig <- rlog(sig.list.adults, blind=FALSE)
+
