@@ -321,7 +321,7 @@ ggsave(file = "meso_PCA_vst.png", PCA_meso)
 
 ### Differential Gene Expression Analysis 
 
-#### Run DE analysis
+#### Run DE analysis - Adult samples
 ```{r}
 #DESEq2 internally applies the median of ratios method for normalization.
 DEG_adult <- DESeq(gdds_adult) #run differential expression test by group using the Wald model
@@ -331,3 +331,68 @@ DEG_adult.results <- results(DEG_adult, contrast= c("depth","mesophotic","shallo
 write.csv(DEG_adult.results, "DEGs_meso_vs_shal_adults_ALL.csv")
 head(DEG_adult.results)
 sum(DEG_adult.results$padj < 0.05, na.rm=TRUE)  #439 genes
+
+# Volcano Plot (significance as a function of fold change)
+par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
+topT <- as.data.frame(DEG_adult.results)
+#Adjusted P values (FDR Q values)
+with(topT, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value (pajd))))
+#Color the significant points with log2 fold change >2 red ()
+#with(subset(topT, padj<0.05 & abs(log2FoldChange)>2), points(log2FoldChange, -log10(padj), pch=20, col="red", cex=0.5))
+with(subset(topT, padj<0.05), points(log2FoldChange, -log10(padj), pch=20, col="red", cex=0.5))
+
+#save list of DEGs
+DEGs_adult <- as.data.frame(subset(DEG_adult.results, padj<0.05))
+DEGs_adult_ordered <- order(DEGs_adult$padj) #Order p-values by smallest value first
+DEGs_adult$contrast <- as.factor(c("adult_mesophotic_vs_shallow"))
+DEGs_adult$gene_id  <- rownames(DEGs_adult)
+rownames(DEGs_adult) <- NULL
+write.csv(DEGs_adult, "DEGs_meso_vs_shal_adults.csv")
+```
+#### Plot DEGs 
+```{r}
+#identify signficant pvalues with 5%FDR
+DEG_adult.results$gene_id  <- rownames(gdds_adult)
+sig_adults <- subset(DEG_adult.results, padj<0.05,)
+rownames(sig_adults) <- sig_adults[,7] #rename rownames of sig_adults as column 7
+#subset list of sig transcripts from original count data
+sig.list.adults <- gdds_adult[which(rownames(gdds_adult) %in% rownames(sig_adults)),]
+
+#apply a vst transformation to minimize effects of small counts and normalize by library size
+gdds_adult <- estimateSizeFactors(gdds_adult) 
+print(sizeFactors(gdds_adult))
+rsig <- vst(sig.list.adults, blind=FALSE)
+
+PCA.sig.adults <- plotPCA(rsig, intgroup="depth")#Plot PCA of all samples for DEG only
+PCA.sig.adults #view plot
+
+pdf(file="PCA_sigDEGs_adults.pdf")
+PCA.sig.adults #view plot
+dev.off()
+
+## Heatmap 
+#make an expression object
+#difference in expression compared to average across all samples
+library(pheatmap)
+library(RColorBrewer)
+library(viridis)
+library(MetBrewer)
+
+colors = met.brewer("OKeeffe1",n=15,type="continuous", direction=-1)
+
+Sym.mat <- assay(rsig)
+Sym.mat <- Sym.mat - rowMeans(Sym.mat)
+Sym.df <- data.frame(colData(rsig)[c("depth")])
+pdf(file="SigDEGs_Heatmap_adults_changeColors.pdf")
+pheatmap(Sym.mat, annotation_col = Sym.df, clustering_method = "average",
+         clustering_distance_rows="euclidean", 
+         #color = viridis(400),
+         color = colors,
+         show_rownames =FALSE, cluster_cols=TRUE,
+         show_colnames =TRUE) #plot heatmap of all DEG by group
+
+dev.off()
+```
+
+#### Run DE analysis - Planulae samples
+```{r}
