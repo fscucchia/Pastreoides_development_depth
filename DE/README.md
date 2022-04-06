@@ -180,6 +180,7 @@ gdds_planulae <- DESeqDataSetFromMatrix(countData = gcount_filt_planulae,
 
 #### Visualize gene count data
 ```{r}
+## Log-transform the count data
 SF.gdds_planulae <- estimateSizeFactors( gdds_planulae) 
 print(sizeFactors(SF.gdds_planulae)) 
 
@@ -208,3 +209,125 @@ ggsave(file = "planulae_PCA_vst.png", PCA_planulae)
 
 #### Keep only selected depth (shallow) from treatment info and count data
 ```{r}
+treatmentinfo_shallow <- filter(treatmentinfo, depth=="shallow")
+gcount_shallow <- gcount[, treatmentinfo_shallow$sample_id]
+
+#create filter for the counts data
+filt_shallow <- filterfun(pOverA(0.5,10))
+gfilt_shallow <- genefilter(gcount_shallow, filt_shallow)
+
+#identify genes to keep by count filter
+gkeep_shallow <- gcount_shallow[gfilt_shallow,]
+
+#identify gene lists
+gn.keep_shallow <- rownames(gkeep_shallow)
+
+#gene count data filtered in PoverA, P percent of the samples have counts over A
+gcount_filt_shallow <- as.data.frame(gcount_shallow[which(rownames(gcount_shallow) %in% gn.keep_shallow),])
+
+### Construct the DESeq dataset
+treatmentinfo_shallow$age <- factor(treatmentinfo_shallow$age, levels = c("adult","planulae"))
+
+#Set DESeq2 design
+gdds_shallow <- DESeqDataSetFromMatrix(countData = gcount_filt_shallow,
+                                     colData = treatmentinfo_shallow,
+                                     design = ~age)
+```
+
+#### Visualize gene count data
+```{r}
+## Log-transform the count data
+SF.gdds_shallow <- estimateSizeFactors( gdds_shallow) 
+print(sizeFactors(SF.gdds_shallow)) 
+
+gvst_shallow <- vst(gdds_shallow, blind=FALSE) 
+
+#### Principal component plot of shallow samples
+
+gPCAdata_shallow <- plotPCA(gvst_shallow, intgroup = c("age"), returnData=TRUE)
+percentVar_shallow <- round(100*attr(gPCAdata_shallow, "percentVar")) #plot PCA of samples with all data
+PCA_shallow <- ggplot(gPCAdata_shallow, aes(PC1, PC2, color=age)) + 
+  geom_point(size=3) +
+  xlab(paste0("PC1: ",percentVar_shallow[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar_shallow[2],"% variance")) +
+  scale_color_manual(labels = c("adult", "planulae"), values = c("adult"="indianred3", "planulae"="orange")) +
+  coord_fixed() +
+  theme_bw() + #Set background color
+  theme(panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) + #Set the plot background
+  theme(legend.position = ("top")); PCA_shallow #set title attributes
+
+ggsave(file = "shallow_PCA_vst.png", PCA_shallow)
+```
+
+#### Keep only selected depth (mesophotic) from treatment info and count data
+```{r}
+treatmentinfo_meso <- filter(treatmentinfo, depth=="mesophotic")
+gcount_meso <- gcount[, treatmentinfo_meso$sample_id]
+
+#create filter for the counts data
+filt_meso <- filterfun(pOverA(0.5,10))
+gfilt_meso <- genefilter(gcount_meso, filt_meso)
+
+#identify genes to keep by count filter
+gkeep_meso <- gcount_meso[gfilt_meso,]
+
+#identify gene lists
+gn.keep_meso <- rownames(gkeep_meso)
+
+#gene count data filtered in PoverA, P percent of the samples have counts over A
+gcount_filt_meso <- as.data.frame(gcount_meso[which(rownames(gcount_meso) %in% gn.keep_meso),])
+
+### Construct the DESeq dataset
+treatmentinfo_meso$age <- factor(treatmentinfo_meso$age, levels = c("adult","planulae"))
+
+#Set DESeq2 design
+gdds_meso <- DESeqDataSetFromMatrix(countData = gcount_filt_meso,
+                                       colData = treatmentinfo_meso,
+                                       design = ~age)
+```
+
+#### Visualize gene count data
+```{r}
+## Log-transform the count data
+SF.gdds_meso <- estimateSizeFactors( gdds_meso) 
+print(sizeFactors(SF.gdds_meso)) 
+
+gvst_meso <- vst(gdds_meso, blind=FALSE) 
+
+#### Principal component plot of mesophotic samples
+
+gPCAdata_meso<- plotPCA(gvst_meso, intgroup = c("age"), returnData=TRUE)
+percentVar_meso <- round(100*attr(gPCAdata_meso, "percentVar")) #plot PCA of samples with all data
+PCA_meso <- ggplot(gPCAdata_meso, aes(PC1, PC2, color=age)) + 
+  geom_point(size=3) +
+  xlab(paste0("PC1: ",percentVar_meso[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar_meso[2],"% variance")) +
+  scale_color_manual(labels = c("adult", "planulae"), values = c("adult"="blue", "planulae"="deepskyblue")) +
+  coord_fixed() +
+  theme_bw() + #Set background color
+  theme(panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) + #Set the plot background
+  theme(legend.position = ("top")); PCA_meso #set title attributes
+
+ggsave(file = "meso_PCA_vst.png", PCA_meso)
+```
+
+### Differential Gene Expression Analysis 
+
+#### Run DE analysis
+
+#DESEq2 itrnally applies the median of ratios method for normalization.
+DEG_adult <- DESeq(gdds_adult) #run differential expression test by group using the Wald model
+
+#Explore significant p-values for meso and shallow adults
+DEG_adult.results <- results(DEG_adult, contrast= c("depth","mesophotic","shallow"))
+write.csv(DEG_adult.results, "DEGs_meso_vs_shal_adults_ALL.csv")
+head(DEG_adult.results)
+sum(DEG_adult.results$padj < 0.05, na.rm=TRUE)  #439 genes
