@@ -597,16 +597,3 @@ dev.off()
 DEGs_all <- bind_rows(DEGs_adult, DEGs_planulae, DEGs_shallow, DEGs_meso)
 ```
 
-### Visualize differentially-expressed genes: ADULTS
-```{r}
-#### Subset and Log-transform the count data
-#Subset the gene count matrix by the list of DEGs
-DEG_adult.results$gene_id  <- rownames(gdds_adult)
-sig_adults <- subset(DEG_adult.results, padj<0.05,)
-rownames(sig_adults) <- sig_adults[,7] #rename rownames of sig_adults as column 7
-#subset list of sig transcripts from original count data
-sig.list.adults <- gdds_adult[which(rownames(gdds_adult) %in% rownames(sig_adults)),]
-
-#apply a rlog transformation to minimize effects of small counts and normalize wrt library size
-rsig <- rlog(sig.list.adults, blind=FALSE)
-
