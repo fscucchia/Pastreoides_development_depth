@@ -1,5 +1,7 @@
 ## RNAseq Differential Expression Analysis of _P. astreoides_ planulae and adult samples from shallow and mesophotic reefs ######
 
+This script is based on the work of [Erin Chille](https://github.com/echille/Mcapitata_OA_Developmental_Gene_Expression_Timeseries/blob/main/4-Differential-Gene-Expression-Analysis/pHTreatment_RNAseqDE.Rmd), with some modifications and adjustments.
+
 ### Set up workspace in R Studio
 
 ```{r}
@@ -71,3 +73,21 @@ print(sizeFactors(SF.gdds)) #View size factors. In this case size factors are al
 gvst <- vst(gdds, blind=FALSE) 
 
 ### Principal component plot of samples
+
+gPCAdata <- plotPCA(gvst, intgroup = c("group"), returnData=TRUE)
+percentVar <- round(100*attr(gPCAdata, "percentVar")) #plot PCA of samples with all data
+PCA <- ggplot(gPCAdata, aes(PC1, PC2, color=group)) + 
+  geom_point(size=3) +
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance")) +
+  scale_color_manual(labels = c("adult_meso","adult_shal","planu_meso", "planu_shal"), values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  coord_fixed() +
+  theme_bw() + #Set background color
+  theme(panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) + #Set the plot background
+  theme(legend.position = ("top")); PCA #set title attributes`
+
+ggsave(file = "PCA_all_vst.png", PCA)
