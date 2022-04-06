@@ -3,6 +3,7 @@ The following document contains the bioinformatic pipeline used for identifying 
 ---
 
 **Tools used**  
+
 Blastx search: [Diamond](https://github.com/bbuchfink/diamond) 
 Final heatmap: [R](https://cran.r-project.org/)
 
