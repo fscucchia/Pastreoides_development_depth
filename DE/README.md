@@ -393,6 +393,85 @@ pheatmap(Sym.mat, annotation_col = Sym.df, clustering_method = "average",
 
 dev.off()
 ```
-
 #### Run DE analysis - Planulae samples
 ```{r}
+DEG_planulae <- DESeq(gdds_planulae) #run differential expression test by group using the Wald model
+
+DEG_planulae.results <- results(DEG_planulae, contrast= c("depth","mesophotic","shallow"))
+write.csv(DEG_planulae.results, "DEGs_planulae_mesophotic_vs_shallow_ALL.csv")
+head(DEG_planulae.results)
+sum(DEG_planulae.results$padj < 0.05, na.rm=TRUE)  #2898 genes
+
+#save DEGs list
+DEGs_planulae <- as.data.frame(subset(DEG_planulae.results, padj<0.05))
+DEGs_planulae_ordered <- order(DEGs_planulae$padj) #Order p-values by smallest value first
+DEGs_planulae$contrast <- as.factor(c("planulae_mesophotic_vs_shallow"))
+DEGs_planulae$gene_id  <- rownames(DEGs_planulae)
+rownames(DEGs_planulae) <- NULL
+write.csv(DEGs_planulae, "DEGs_meso_vs_shal_planulae.csv")
+
+###Volcano plot 
+# Volcano Plot (significance as a function of fold change)
+par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
+topT <- as.data.frame(DEG_planulae.results)
+#Adjusted P values (FDR Q values)
+with(topT, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value (pajd))))
+#Color the significant points 
+with(subset(topT, padj<0.05), points(log2FoldChange, -log10(padj), pch=20, col="red", cex=0.5))
+```
+#### Plot DEGs 
+```{r}
+#identify signficant pvalues with 5%FDR
+DEG_planulae.results$gene_id  <- rownames(gdds_planulae)
+sig_planulae <- subset(DEG_planulae.results, padj<0.05,)
+rownames(sig_planulae) <- sig_planulae[,7] #rename rownames of sig_planulae as column 7
+#subset list of sig transcripts from original count data
+sig.list.planulae <- gdds_planulae[which(rownames(gdds_planulae) %in% rownames(sig_planulae)),]
+
+
+#apply a vst transformation to minimize effects of small counts and normalize wrt library size
+gdds_planulae <- estimateSizeFactors(gdds_planulae) 
+print(sizeFactors(gdds_planulae)) 
+rsig <- vst(sig.list.planulae, blind=FALSE)
+
+PCA.sig.planulae <- plotPCA(rsig, intgroup="depth")#Plot PCA of all samples for DEG only
+PCA.sig.planulae #view plot
+
+pdf(file="PCA_sigDEGs_planulae.pdf")
+PCA.sig.planulae #view plot
+dev.off()
+
+### Heatmap 
+#make an expression object
+#difference in expression compared to average across all samples
+library(pheatmap)
+Sym.mat <- assay(rsig)
+Sym.mat <- Sym.mat - rowMeans(Sym.mat)
+Sym.df <- data.frame(colData(rsig)[c("depth")])
+colors = met.brewer("OKeeffe1",n=20,type="continuous", direction=-1)
+
+pdf(file="SigDEGs_Heatmap_planulae_changeColors.pdf")
+pheatmap(Sym.mat, annotation_col = Sym.df, clustering_method = "average",
+         clustering_distance_rows="euclidean", 
+         color=colors,
+         show_rownames =FALSE, cluster_cols=TRUE,
+         show_colnames =TRUE) #plot heatmap of all DEG by group
+
+dev.off()
+```
+
+#### Run DE analysis - Shallow samples
+```{r}
+DEG_shallow <- DESeq(gdds_shallow) #run differential expression test by group using the Wald model
+
+DEG_shallow.results <- results(DEG_shallow, contrast= c("age","planulae","adult"))  #adult is the reference
+write.csv(DEG_shallow.results, "DEGs_shal_planulae_vs_adults_ALL.csv")
+head(DEG_shallow.results)
+sum(DEG_shallow.results$padj < 0.05, na.rm=TRUE)  #10664 genes
+
+DEGs_shallow <- as.data.frame(subset(DEG_shallow.results, padj<0.05))
+DEGs_shallow_ordered <- order(DEGs_shallow$padj) #Order p-values by smallest value first
+DEGs_shallow$contrast <- as.factor(c("shallow_planulae_vs_adults"))
+DEGs_shallow$gene_id  <- rownames(DEGs_shallow)
+rownames(DEGs_shallow) <- NULL
+write.csv(DEGs_shallow, "DEGs_shal_planulae_vs_adults.csv")
