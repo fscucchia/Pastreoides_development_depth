@@ -1,0 +1,13 @@
+sample;age;depth;group
+D20;adult;mesophotic;adult_meso
+D21;adult;mesophotic;adult_meso
+D22;adult;mesophotic;adult_meso
+L7;planulae;mesophotic;planu_meso
+L8;planulae;mesophotic;planu_meso
+L9;planulae;mesophotic;planu_meso
+R13B;adult;shallow;adult_shal
+R15B;adult;shallow;adult_shal
+R33;adult;shallow;adult_shal
+S4;planulae;shallow;planu_shal
+S5;planulae;shallow;planu_shal
+S7;planulae;shallow;planu_shal
