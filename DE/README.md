@@ -91,3 +91,120 @@ PCA <- ggplot(gPCAdata, aes(PC1, PC2, color=group)) +
   theme(legend.position = ("top")); PCA #set title attributes`
 
 ggsave(file = "PCA_all_vst.png", PCA)
+```
+
+#### Keep only selected life stages (adults) from treatment info and count data
+```{r}
+treatmentinfo_adult <- filter(treatmentinfo, age=="adult")
+gcount_adult <- gcount[, treatmentinfo_adult$sample_id]
+
+#create filter for the counts data
+filt_adult <- filterfun(pOverA(0.5,10))
+gfilt_adult <- genefilter(gcount_adult, filt_adult)
+
+#identify genes to keep by count filter
+gkeep_adult <- gcount_adult[gfilt_adult,]
+
+#identify gene lists
+gn.keep_adult <- rownames(gkeep_adult)
+
+#gene count data filtered in PoverA, P percent of the samples have counts over A
+gcount_filt_adult <- as.data.frame(gcount_adult[which(rownames(gcount_adult) %in% gn.keep_adult),])
+
+### Construct the DESeq dataset
+
+treatmentinfo_adult$depth <- factor(treatmentinfo_adult$depth, levels = c("mesophotic","shallow"))
+
+#Set DESeq2 design
+gdds_adult <- DESeqDataSetFromMatrix(countData = gcount_filt_adult,
+                                  colData = treatmentinfo_adult,
+                                  design = ~depth)
+```
+
+#### Visualize gene count data
+```{r}
+## Log-transform the count data
+SF.gdds_adult <- estimateSizeFactors( gdds_adult) 
+print(sizeFactors(SF.gdds_adult)) #need to be less than 4
+
+gvst_adult <- vst(gdds_adult, blind=FALSE) 
+
+### Principal component plot of adult samples
+
+gPCAdata_adult <- plotPCA(gvst_adult, intgroup = c("depth"), returnData=TRUE)
+percentVar_adult <- round(100*attr(gPCAdata_adult, "percentVar")) #plot PCA of samples with all data
+PCA_adult <- ggplot(gPCAdata_adult, aes(PC1, PC2, color=depth)) + 
+  geom_point(size=3) +
+  xlab(paste0("PC1: ",percentVar_adult[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar_adult[2],"% variance")) +
+  scale_color_manual(labels = c("mesophotic", "shallow"), values = c("mesophotic"="blue", "shallow"="indianred3")) +
+  coord_fixed() +
+  theme_bw() + #Set background color
+  theme(panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) + #Set the plot background
+  theme(legend.position = ("top")); PCA_adult #set title attributes
+
+ggsave(file = "Adult_PCA_vst.png", PCA_adult)
+```
+
+#### Keep only selected life stages (planulae) from treatment info and count data
+```{r}
+treatmentinfo_planulae <- filter(treatmentinfo, age=="planulae")
+gcount_planulae <- gcount[, treatmentinfo_planulae$sample_id]
+
+#create filter for the counts data
+filt_planulae <- filterfun(pOverA(0.5,10))
+gfilt_planulae <- genefilter(gcount_planulae, filt_planulae)
+
+#identify genes to keep by count filter
+gkeep_planulae <- gcount_planulae[gfilt_planulae,]
+
+#identify gene lists
+gn.keep_planulae <- rownames(gkeep_planulae)
+
+#gene count data filtered in PoverA, P percent of the samples have counts over A
+gcount_filt_planulae <- as.data.frame(gcount_planulae[which(rownames(gcount_planulae) %in% gn.keep_planulae),])
+
+### Construct the DESeq dataset
+
+treatmentinfo_planulae$depth <- factor(treatmentinfo_planulae$depth, levels = c("mesophotic","shallow"))
+
+#Set DESeq2 design
+gdds_planulae <- DESeqDataSetFromMatrix(countData = gcount_filt_planulae,
+                                     colData = treatmentinfo_planulae,
+                                     design = ~depth)
+```
+
+#### Visualize gene count data
+```{r}
+SF.gdds_planulae <- estimateSizeFactors( gdds_planulae) 
+print(sizeFactors(SF.gdds_planulae)) 
+
+gvst_planulae <- vst(gdds_planulae, blind=FALSE) 
+
+#### Principal component plot of adult samples
+
+gPCAdata_planulae <- plotPCA(gvst_planulae, intgroup = c("depth"), returnData=TRUE)
+percentVar_planulae <- round(100*attr(gPCAdata_planulae, "percentVar")) #plot PCA of samples with all data
+PCA_planulae <- ggplot(gPCAdata_planulae, aes(PC1, PC2, color=depth)) + 
+  geom_point(size=3) +
+  xlab(paste0("PC1: ",percentVar_planulae[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar_planulae[2],"% variance")) +
+  scale_color_manual(labels = c("mesophotic", "shallow"), values = c("mesophotic"="deepskyblue", "shallow"="orange")) +
+  coord_fixed() +
+  theme_bw() + #Set background color
+  theme(panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) + #Set the plot background
+  theme(legend.position = ("top")); PCA_planulae #set title attributes
+
+ggsave(file = "planulae_PCA_vst.png", PCA_planulae)
+```
+
+#### Keep only selected depth (shallow) from treatment info and count data
+```{r}
