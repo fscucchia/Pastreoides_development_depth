@@ -11,7 +11,7 @@ In progress...👩🏻‍💻
 
 ### Species identification
 
-**[Coral host and symbiont species identification](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/Species_Identification)** - High quality reads were blasted using Diamond v2.0.14.152 ([Buchfink et al., 2021](https://www.nature.com/articles/s41592-021-01101-x)) against the [NCBI](https://www.ncbi.nlm.nih.gov/) and [Reefgenomics](http://reefgenomics.org/) genome-based proteomes databases of Symbiodiniaceae species _Symbiodinium microadraticum_, _Cladocopium goreaui_, and _Fugacium kawagutii_ (formerly _Symbiodinium_ spp. clades A, C1, and F, respectively ([LaJeunesse et al., 2018](https://doi.org/10.1016/j.cub.2018.07.008))), as well as to the databases of Cnidaria, selected stramenopiles/alveolates/Rhizaria and Metazoa.
+**[Coral host and symbiont species identification](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/Species_Identification)** - High quality reads were blasted using Diamond v2.0.14.152 ([Buchfink et al., 2021](https://www.nature.com/articles/s41592-021-01101-x)) against the [NCBI](https://www.ncbi.nlm.nih.gov/), [Reefgenomics](http://reefgenomics.org/) and [Marinegenomics](https://marinegenomics.oist.jp/gallery) genome-based proteomes databases of Symbiodiniaceae species _Symbiodinium microadraticum_, _Cladocopium goreaui_, _Fugacium kawagutii_, _Breviolum minutum and _Durusdinium trenchii_  (formerly _Symbiodinium_ spp. clades A, C1, F, B and D respectively ([LaJeunesse et al., 2018](https://doi.org/10.1016/j.cub.2018.07.008))), as well as to genome-based proteomes databases available for several coral species.
 
 ### Differential expression
 
