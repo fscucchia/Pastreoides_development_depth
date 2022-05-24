@@ -7,16 +7,25 @@ In progress...👩🏻‍💻
 
 ### RNA-Seq reads quality filtering and mapping
 
-**[Quality filtering and mapping](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/Filtering_and_Mapping)** - Details the processing and analyses of the _P. astreoides_ transcriptome sequencing data. RNA-Seq reads processing included adapter trimming using Cutadapt v1.15 ([Martin, 2011](https://doi.org/10.14806/ej.17.1.200)) and quality filtering using Trimmomatic v0.3 ([Bolger et al., 2014](https://doi.org/10.1093/bioinformatics/btu170)). Reads were aligned to the host genome assembly using HISAT2 ([Kim et al., 2019](https://www.nature.com/articles/s41587-019-0201-4)). Transcripts assembly and quantification were performed using Stringtie ([Pertea et al., 2015](https://www.nature.com/articles/nbt.3122)).
+**[Quality filtering and mapping](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/Filtering_and_Mapping)** - Details the processing and analyses of the _P. astreoides_ transcriptome sequencing data. RNA-Seq reads processing included adapter trimming using Cutadapt v2.6 ([Martin, 2011](https://doi.org/10.14806/ej.17.1.200)) and quality filtering using Trimmomatic v0.39 ([Bolger et al., 2014](https://doi.org/10.1093/bioinformatics/btu170)). Reads were aligned to the host genome assembly using HISAT2 v2.2.1 ([Kim et al., 2019](https://www.nature.com/articles/s41587-019-0201-4)). Transcripts assembly and quantification were performed using Stringtie v2.2.5 ([Pertea et al., 2015](https://www.nature.com/articles/nbt.3122)).
 
-### Species identification
+### Algal symbiont species identification
 
-**[Coral host and symbiont species identification](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/Species_Identification)** - High quality reads were blasted using Diamond v2.0.14.152 ([Buchfink et al., 2021](https://www.nature.com/articles/s41592-021-01101-x)) against the [NCBI](https://www.ncbi.nlm.nih.gov/), [Reefgenomics](http://reefgenomics.org/) and [Marinegenomics](https://marinegenomics.oist.jp/gallery) genome-based proteomes databases of Symbiodiniaceae species _Symbiodinium microadraticum_, _Cladocopium goreaui_, _Fugacium kawagutii_, _Breviolum minutum and _Durusdinium trenchii_  (formerly _Symbiodinium_ spp. clades A, C1, F, B and D respectively ([LaJeunesse et al., 2018](https://doi.org/10.1016/j.cub.2018.07.008))), as well as to genome-based proteomes databases available for several coral species.
+**[Coral host and symbiont species identification](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/Species_Identification)** - High quality reads were blasted using Diamond v2.0.11 ([Buchfink et al., 2021](https://www.nature.com/articles/s41592-021-01101-x)) against the [NCBI](https://www.ncbi.nlm.nih.gov/), [Reefgenomics](http://reefgenomics.org/), [Marinegenomics](https://marinegenomics.oist.jp/gallery) and [UQ eSpace](https://espace.library.uq.edu.au/view/UQ:f1b3a11) proteomes databases of Symbiodiniaceae species _Symbiodinium microadraticum_, _Symbiodinium tridacnidorum_, _Symbiodinium necroappetens_, _Symbiodinium natans_, _Symbiodinium linuacheae_, _Cladocopium goreaui_, _Cladocopium_ C15, _Fugacium kawagutii_,  and _Durusdinium trenchii_  (formerly _Symbiodinium_ spp. clades A, C, F, and D ([LaJeunesse et al., 2018](https://doi.org/10.1016/j.cub.2018.07.008))).
+
+### SNPs characterization
+
+**[Coral host SNPs characterization]()** - Single nucleotide polymorphisms (SNPs) analysis was conducted using the Genome Analysis Toolkit framework (GATK, v4.2.0; ([McKenna et al., 2010](https://doi.org/10.1101/gr.107524.110))) following the recommended RNA-Seq SNPs practice of the Broad Institute ([(Auwera et al. 2013)](https://currentprotocols.onlinelibrary.wiley.com/doi/10.1002/0471250953.bi1110s43)), with necessary adjustments for genotype calling in non-model organisms where variants sites are not known beforehand. HISAT-aligned reads were sorted and marked for duplicates, variant calling was performed with the GATK HaplotypeCaller tool ([McKenna et al., 2010](https://doi.org/10.1101/gr.107524.110)) and genotypes were then jointly called using the GATK GenotypeGVCFs tool. The GATK SelectVariants and VariantFiltration tools were used to filter the joined variant-calling matrices for quality by depth. filtering for linkage disequilibrium was applied using the --indep-pairwise function of PLINK (v2.0, ([Purcell et al. 2007](https://www.cell.com/ajhg/fulltext/S0002-9297(07)61352-4)).
+To assess genetic differentiation among age-depth groups, the genotype matrix was loaded as a GDS object in the R environment (v3.6.3, (R Core Team 2020)) using the function snpgdsOpen of the R package SNPRelate (v1.20.1, ([Zheng et al. 2012](https://academic.oup.com/bioinformatics/article/28/24/3326/245844)). The fixation index (_Fst_)([Weir & Cockerham, 1984](https://doi.org/10.1111/j.1558-5646.1984.tb05657.x)) was estimated using the R package [HIERFSTAT (v0.5.10)](https://cran.r-project.org/web/packages/hierfstat/index.html). 
 
 ### Differential expression
 
-**[Coral host differential expression](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/DE)** - DE analysis was conducted using Bioconductor DEseq2 v1.30.1 ([Love et al., 2014](https://doi.org/10.1186/s13059-014-0550-8))
-DE analysis was conducted using Bioconductor DEseq2 v1.30.1 (Love et al., 2014) by a) analyzing mesophotic and shallow samples considering a single factor (developmental stage) with two levels (planulae, adults), and b) analyzing planulae and adult samples considering a single factor (depth) with two levels (shallow, mesophotic).
+**[Coral host differential expression](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/DE)** - DE analysis was conducted using Bioconductor DEseq2 v1.26.0 ([Love et al., 2014](https://doi.org/10.1186/s13059-014-0550-8)) by analyzing planulae and adult samples considering a single factor (depth) with two levels (shallow, mesophotic).
 
 ### Weighted correlation network analysis
-**[Coral host WGCNA](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/WGCNA)**
+
+**[Coral host WGCNA](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/WGCNA)** - 
+
+### Gene ontology enrichment
+
+**[Coral host gene ontology enrichment analysis]()** -  
