@@ -9,7 +9,8 @@ Additionally, the pipeline by Dmytro Kryvokhyzha for [genotype calling in a non-
 **Installing programs**
 
 1) GATK 
-Followed the directions of the [Broad Institute](https://gatk.broadinstitute.org/hc/en-us/articles/360036194592-Getting-started-with-GATK4):                              - Download [gatk v4.2.0.0](https://github.com/broadinstitute/gatk/releases/tag/4.2.0.0)
+Followed the directions of the [Broad Institute](https://gatk.broadinstitute.org/hc/en-us/articles/360036194592-Getting-started-with-GATK4):                                  
+- Download [gatk v4.2.0.0](https://github.com/broadinstitute/gatk/releases/tag/4.2.0.0)
 ```
 cd /data/home/mass/fscucchia/programs
 unzip gatk-4.2.0.0.zip
