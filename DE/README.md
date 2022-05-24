@@ -223,11 +223,11 @@ sum(DEG_adult.results$padj < 0.05, na.rm=TRUE)  #439 genes
 # Volcano Plot (significance as a function of fold change)
 par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
 topT <- as.data.frame(DEG_adult.results)
-#Adjusted P values (FDR Q values)
-with(topT, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value (pajd))))
-#Color the significant points with log2 fold change >2 red ()
-#with(subset(topT, padj<0.05 & abs(log2FoldChange)>2), points(log2FoldChange, -log10(padj), pch=20, col="red", cex=0.5))
-with(subset(topT, padj<0.05), points(log2FoldChange, -log10(padj), pch=20, col="red", cex=0.5))
+  #Adjusted P values (FDR Q values)
+with(topT, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot"))
+with(subset(topT , padj<.05), points(log2FoldChange, -log10(padj), pch=20,col="black"))
+with(subset(topT, padj<0.05 & (log2FoldChange)>0), points(log2FoldChange, -log10(padj), pch=20, col="violetred2",cex=0.5))
+with(subset(topT, padj<0.05 & (log2FoldChange)<(0*-0)), points(log2FoldChange, -log10(padj), pch=20, col="lightseagreen",cex=0.5))
 
 #save list of DEGs
 DEGs_adult <- as.data.frame(subset(DEG_adult.results, padj<0.05))
@@ -303,9 +303,10 @@ write.csv(DEGs_planulae, "DEGs_meso_vs_shal_planulae.csv")
 par(mar=c(5,5,5,5), cex=1.0, cex.main=1.4, cex.axis=1.4, cex.lab=1.4)
 topT <- as.data.frame(DEG_planulae.results)
 #Adjusted P values (FDR Q values)
-with(topT, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot", cex=1.0, xlab=bquote(~Log[2]~fold~change), ylab=bquote(~-log[10]~Q~value (pajd))))
-#Color the significant points 
-with(subset(topT, padj<0.05), points(log2FoldChange, -log10(padj), pch=20, col="red", cex=0.5))
+with(topT, plot(log2FoldChange, -log10(padj), pch=20, main="Volcano plot"))
+with(subset(topT , padj<.05), points(log2FoldChange, -log10(padj), pch=20,col="black"))
+with(subset(topT, padj<0.05 & (log2FoldChange)>0), points(log2FoldChange, -log10(padj), pch=20, col="violetred2",cex=0.5))
+with(subset(topT, padj<0.05 & (log2FoldChange)<(0*-0)), points(log2FoldChange, -log10(padj), pch=20, col="lightseagreen",cex=0.5))
 ```
 #### Plot DEGs 
 ```{r}
@@ -315,7 +316,6 @@ sig_planulae <- subset(DEG_planulae.results, padj<0.05,)
 rownames(sig_planulae) <- sig_planulae[,7] #rename rownames of sig_planulae as column 7
 #subset list of sig transcripts from original count data
 sig.list.planulae <- gdds_planulae[which(rownames(gdds_planulae) %in% rownames(sig_planulae)),]
-
 
 #apply a vst transformation to minimize effects of small counts and normalize wrt library size
 gdds_planulae <- estimateSizeFactors(gdds_planulae) 
@@ -349,6 +349,170 @@ dev.off()
 ```
 
 #### merge all DEGs tables
+```{r}
 DEGs_all <- bind_rows(DEGs_adult, DEGs_planulae)
 ```
+
+#### Visualize differentially-expressed genes: ADULTS
+```{r}
+##### Subset and Log-transform the count data
+#Subset the gene count matrix by the list of DEGs
+DEG_adult.results$gene_id  <- rownames(gdds_adult)
+sig_adults <- subset(DEG_adult.results, padj<0.05,)
+rownames(sig_adults) <- sig_adults[,7] #rename rownames of sig_adults as column 7
+#subset list of sig transcripts from original count data
+sig.list.adults <- gdds_adult[which(rownames(gdds_adult) %in% rownames(sig_adults)),]
+
+#apply a vst transformation to minimize effects of small counts and normalize wrt library size
+rsig <- vst(sig.list.adults, blind=FALSE)
+
+#Make a matrix for computing similarity
+mat.adults <- assay(rsig)#[pln_topVarGenes, ] #make an expression object
+mat.adults <- mat.adults - rowMeans(mat.adults) #difference in expression compared to average across all samples
+
+### Compute the optimal number of clusters for plotting
+#Find the optimum number of clusters using 30 indexes with the NbClust() package. 
+#This took about 35 minutes to run, so it is commented out.
+
+nb <- NbClust(mat.adults, distance = "euclidean", min.nc = 2,
+         max.nc = 10, method = "kmeans")
+#According to the majority rule, the best number of clusters is  2 
+ 
+fviz_nbclust(nb)
+
+calc.kmeans <- kmeans(mat.adults, 2)
+cluster_res <- data.frame(gene_id = names(calc.kmeans$cluster), cluster = calc.kmeans$cluster)
+# 
+
+DEGs_adult <- as.data.frame(subset(DEG_adult.results, padj<0.05))
+write.csv(DEGs_adult, "DEGs_adult_withoutCluster.csv")
+DEGs_adult_ordered <- order(DEGs_adult$padj) #Order p-values by smallest value first
+DEGs_adult$contrast <- as.factor(c("adult_mesophotic_vs_shallow"))
+
+DEGs_adult_cluster <- merge(DEGs_adult, cluster_res, by = "gene_id")
+write.csv(DEGs_adult_cluster, "DEGs_adult_cluster.csv")
+
+
+#### Plot a heatmap of differentially-expressed genes
+
+DEGs_adult_cluster_heat <- read.csv("DEGs_adult_cluster.csv", header = TRUE, sep = ",")[,-c(1)]
+DEGs_adult_cluster_heat <- subset(DEGs_adult_cluster, select = c(gene_id, cluster))
+
+#Prepare annotations
+hm_ann_row <- unique(DEGs_adult_cluster_heat)
+rownames(hm_ann_row) <- hm_ann_row$gene_id
+hm_ann_row <- subset(hm_ann_row, select=cluster)
+hm_ann_row$cluster <- gsub(1,"Cluster1",hm_ann_row$cluster)
+hm_ann_row$cluster <- gsub(2,"Cluster2",hm_ann_row$cluster)
+hm_ann_row <- as.matrix(hm_ann_row[rownames(mat.adults),])
+hmdepth_adults <- colData(grlog_adult)[c("depth")]
+
+hmdepth_adults$depth <- factor(hmdepth_adults$depth, levels=c("shallow", "mesophotic"))
+hm_ann_col <- HeatmapAnnotation(df=hmdepth_adults, col = list(depth=c("mesophotic" ="cadetblue", "shallow"  ="indianred3"))) #make dataframe for column naming
+
+DEGs_adult_clusterHeatmap <-  Heatmap(mat.adults, column_title = "Depth", 
+                           name = "expression",
+                           show_row_names = FALSE, top_annotation = hm_ann_col, show_column_names = FALSE, row_dend_side = "left" ,
+                           column_split = 2, column_dend_height = unit(0.5, "in"),
+                           km = 2, row_km_repeats = 100, row_title = c("Cluster1", "Cluster2"),
+                           row_gap = unit(2.5, "mm"), border = TRUE,
+                           column_names_gp =  gpar(fontsize = 10)); DEGs_adult_clusterHeatmap
+png("DEGs_adult_clusterHeatmap.png")
+DEGs_adult_clusterHeatmap
+dev.off()
+```
+
+#### Visualize differentially-expressed genes: PLANULAE
+```{r}
+##### Subset and Log-transform the count data
+#Subset the gene count matrix by the list of DEGs
+DEG_planulae.results$gene_id  <- rownames(gdds_planulae)
+sig_planulae <- subset(DEG_planulae.results, padj<0.05,)
+rownames(sig_planulae) <- sig_planulae[,8] #rename rownames of sig_planulae as column 8 (gene_ID)
+#subset list of sig transcripts from original count data
+sig.list.planulae <- gdds_planulae[which(rownames(gdds_planulae) %in% rownames(sig_planulae)),]
+
+#apply a vst transformation to minimize effects of small counts and normalize wrt library size
+planulae_sig <- vst(sig.list.planulae, blind=FALSE)
+
+#Make a matrix for computing similarity
+mat.planulae <- assay(planulae_sig)#[pln_topVarGenes, ] #make an expression object
+mat.planulae <- mat.planulae - rowMeans(mat.planulae) #difference in expression compared to average across all samples
+
+### Compute the optimal number of clusters for plotting
+#Find the optimum number of clusters using 30 indexes with the NbClust() package. 
+#This took about 35 minutes to run, so it is commented out.
+
+nb_planulae <- NbClust(mat.planulae, distance = "euclidean", min.nc = 2,
+              max.nc = 10, method = "kmeans")
+
+#
+lista.methods = c("kl", "ch", "hartigan","mcclain", "gamma", "gplus",
+                  "tau", "dunn", "sdindex", "sdbw", "cindex", "silhouette",
+                  "ball","ptbiserial", "gap","frey")
+lista.distance = c("metodo","euclidean", "maximum", "manhattan", "canberra")
+
+tabla = as.data.frame(matrix(ncol = length(lista.distance), nrow = length(lista.methods)))
+names(tabla) = lista.distance
+
+for (j in 2:length(lista.distance)){
+  for(i in 1:length(lista.methods)){
+    
+    nb_planulae = NbClust(mat.planulae, distance = lista.distance[j],
+                 min.nc = 2, max.nc = 10, 
+                 method = "kmeans", index =lista.methods[i])
+    tabla[i,j] = nb_planulae$Best.nc[1]
+    tabla[i,1] = lista.methods[i]
+    
+  }}
+
+tabla
+#
+
+#According to the majority rule, the best number of clusters is  2 
+
+fviz_nbclust(nb_planulae)
+
+calc.kmeans <- kmeans(mat.planulae, 2)
+cluster_res <- data.frame(gene_id = names(calc.kmeans$cluster), cluster = calc.kmeans$cluster)
+# 
+
+DEGs_planulae <- as.data.frame(subset(DEG_planulae.results, padj<0.05))
+write.csv(DEGs_planulae, "DEGs_planulae_withoutCluster.csv")
+DEGs_planulae_ordered <- order(DEGs_planulae$padj) #Order p-values by smallest value first
+DEGs_planulae$contrast <- as.factor(c("planulae_mesophotic_vs_shallow"))
+
+DEGs_planulae_cluster <- merge(DEGs_planulae, cluster_res, by = "gene_id")
+write.csv(DEGs_planulae_cluster, "DEGs_planulae_cluster.csv")
+
+
+#### Plot a heatmap of differentially-expressed genes
+
+DEGs_planulae_cluster_heat <- read.csv("DEGs_planulae_cluster.csv", header = TRUE, sep = ",")[,-c(1)]
+DEGs_planulae_cluster_heat <- subset(DEGs_planulae_cluster, select = c(gene_id, cluster))
+
+#Prepare annotations
+hm_ann_row <- unique(DEGs_planulae_cluster_heat)
+rownames(hm_ann_row) <- hm_ann_row$gene_id
+hm_ann_row <- subset(hm_ann_row, select=cluster)
+hm_ann_row$cluster <- gsub(1,"Cluster1",hm_ann_row$cluster)
+hm_ann_row$cluster <- gsub(2,"Cluster2",hm_ann_row$cluster)
+hm_ann_row <- as.matrix(hm_ann_row[rownames(mat.planulae),])
+hmdepth_planulae <- colData(gvst_planulae)[c("depth")]
+
+hmdepth_planulaedepth <- factor(hmdepth_planulae$depth, levels=c("shallow", "mesophotic"))
+hm_ann_col <- HeatmapAnnotation(df=hmdepth_planulae, col = list(depth=c("mesophotic" ="cadetblue", "shallow"  ="indianred3"))) #make dataframe for column naming
+
+DEGs_planulae_clusterHeatmap <-  Heatmap(mat.planulae, column_title = "Depth", 
+                                      name = "expression",
+                                      show_row_names = FALSE, top_annotation = hm_ann_col, show_column_names = FALSE, row_dend_side = "left" ,
+                                      column_split = 2, column_dend_height = unit(0.5, "in"),
+                                      km = 2, row_km_repeats = 100, row_title = c("Cluster1", "Cluster2"),
+                                      row_gap = unit(2.5, "mm"), border = TRUE,
+                                      column_names_gp =  gpar(fontsize = 10)); DEGs_planulae_clusterHeatmap
+png("DEGs_planulae_clusterHeatmap.png")
+DEGs_planulae_clusterHeatmap
+dev.off()
+```
+
 
