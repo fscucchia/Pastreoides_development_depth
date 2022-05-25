@@ -93,6 +93,38 @@ Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_de
 - Extract Variant Quality Scores and Plot  
 Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 2.  
 - Make diagnostic plots for Variants Scores  
-Run the [`Diagnostic plots for Variants Scores.r`]() in R.
+Run the [`Diagnostic plots for Variants Scores.r`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/Diagnostic%20plots%20for%20Variants%20Scores.r) in R.
 
 ### 09- Apply Variant filtering
+Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 4, which calls for the script [`Variant_filt.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_filt.sh)(needs to be in the output Variant_Filtration directory). Here I put all the values of the filtering parameters (SNP_QD_MIN=2.00, SNP_MQ_MIN=50.00, etc.) that I could see in the plots from the previous step. 
+
+<details>
+<summary>Troubleshooting tips!</summary>
+<br>
+NOTE: --filter-expression "QD < $INDEL_QD_MIN" and the other parameters need to be run with the $ sign, just the number does not work.
+</details>
+
+##### Check number PASSED after the first filtering
+```
+cd /data/home/mass/fscucchia/Bermuda/output/Variant_Filtration
+OUT="GVCFall_morefilter"
+zcat "${OUT}_SNPs.vcf.gz" | grep -v '^#' | wc -l 
+#949411
+zcat "${OUT}_SNPs_VarScores_filter.vcf.gz" | grep 'PASS' | wc -l
+#457216 (48% remain after first-pass filtering) 
+zcat "${OUT}_INDELs.vcf.gz" | grep -v '^#' | wc -l
+#230546
+zcat "${OUT}_INDELs_VarScores_filter.vcf.gz" | grep 'PASS' | wc -l
+#157252 (68% remain after first-pass filtering)
+```
+#### Extract only variants that PASSED filtering
+```
+zcat "${OUT}_SNPs_VarScores_filter.vcf.gz" | grep -E '^#|PASS' > "${OUT}_SNPs_VarScores_filterPASSED.vcf"
+gatk IndexFeatureFile --input "${OUT}_SNPs_VarScores_filterPASSED.vcf" 1> "${OUT}_SNPs_VarScores_filterPASSED.vcf.log" 2>&1
+zcat "${OUT}_INDELs_VarScores_filter.vcf.gz" | grep -E '^#|PASS' > "${OUT}_INDELs_VarScores_filterPASSED.vcf"
+gatk IndexFeatureFile --input "${OUT}_INDELs_VarScores_filterPASSED.vcf" 1> "${OUT}_INDELs_VarScores_filterPASSED.vcf.log" 2>&1
+```
+#### Check filtering worked
+Show that no variants are left below our threasholds.
+Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 5, which also calls for the R scripts [`check_filtering.R`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/check_filtering.R) and
+[`plot_variants_scores2.R`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/plot_variants_scores2.R) (in the output Variant_Filtration directory).
