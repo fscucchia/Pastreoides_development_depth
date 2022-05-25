@@ -151,3 +151,12 @@ Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_de
 
 ##### Set filtered sites to no call
 Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 8.
+
+##### 3nd-pass filtering
+Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 10.
+
+### 10- VCF to Table 
+Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 11. 
+Got my output files (genotype tables) and vcf files ready for subsequent analyses.
+
+
