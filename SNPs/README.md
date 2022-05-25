@@ -38,13 +38,13 @@ Convert paired-fastq to BAM file (sorted by read name), add read group info (RG)
 
 #### FastqToSam
 Run [`FastqToSam_RUN.sh`](), which calls for the script [`FastqToSam.sh`](). 
-Took 13 hours for 12 samples.
+_Took 13 hours for 12 samples._
 
 #### Collect RG
 Run [`collectRG_rgsam_RUN.sh`](), which calls for the script [`collectRG_rgsam.sh`](). I tried to run all samples in array, but for some reason it did not work.
 So I had to run each sample individually.
 I ran it again changing R1 with R3 in the `collectRG_rgsam.sh` script. 
-Took 10 hours for 12 samples.
+_Took 10 hours for 12 samples._
 
 #### Prepare your reference file
 The GATK uses two files to access and safety check access to the reference files: a .dict dictionary of the contig names and sizes, and a .fai fasta index file to allow efficient random access to the reference bases. You have to generate these files in order to be able to use a fasta file as reference.
@@ -58,4 +58,10 @@ Run script [`gatk_CreateSequenceDictionary.sh`]() argument 2.
 #### Merge unalinged bam file 
 Merge unalinged bam file (now with read group info) with aligned bam file (read group info from unalinged bam is transfered to aligned bam).
 Run [`MergeBamAlignment_RUN.sh`](), which calls for the script [`MergeBamAlignment.sh`](). I tried to run all samples in array, but it did not work again, like the script above. So I run each sample individually.
-Took 13 hours for 12 samples.
+_Took 13 hours for 12 samples._
+
+### 03- MarkDuplicates
+Potential PCR duplicates need to be marked with Picard Tools.
+
+- Merge read groups belonging to the same sample into a single BAM file. Run script [`MarkDuplicates.sh`]().
+_Took 5 hours._
