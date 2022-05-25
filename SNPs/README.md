@@ -37,7 +37,7 @@ make install
 Convert paired-fastq to BAM file (sorted by read name), add read group info (RG) to aligned reads + run the MergeBamAlignment command, which also filters the alinged read (e.g. removes secondary alignments), 
 
 #### FastqToSam
-Run [`FastqToSam_RUN.sh`](), which calls for the script [`FastqToSam.sh`](). 
+Run [`FastqToSam_RUN.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/FastqToSam_RUN.sh), which calls for the script [`FastqToSam.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/FastqToSam.sh). 
 _Took 13 hours for 12 samples._
 
 #### Collect RG
