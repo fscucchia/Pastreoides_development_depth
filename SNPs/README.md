@@ -78,13 +78,13 @@ This is to distinguish between deletions in exons and large skips due to introns
 ---
 
 ### 06- HaplotypeCaller
-Run script [`HaplotypeCaller`](). _Took almost 2 days_.
+Run script [`HaplotypeCaller.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/HaplotypeCaller.sh). _Took almost 2 days_.
 This assumes:  
 --sample-ploidy 2 (default)  
 --heterozygosity 0.001 (deafult; dont have prior info to update this with)
 
 ### 07- Combine *.g.vcf.gz files and call genotypes
-Run scripts [`CombineGVCFs.sh`]() and [`GenotypeGVCFs.sh`](). _Together, they took 1.5 hours._
+Run scripts [`CombineGVCFs.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/CombineGVCFs.sh) and [`GenotypeGVCFs.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/GenotypeGVCFs.sh). _Together, they took 1.5 hours._
 
 ### 08- Select SNPs and Indels
 Run script [`Variant_Filtration.sh`]() argument 1.
