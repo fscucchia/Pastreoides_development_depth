@@ -128,3 +128,26 @@ gatk IndexFeatureFile --input "${OUT}_INDELs_VarScores_filterPASSED.vcf" 1> "${O
 Show that no variants are left below our threasholds.
 Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 5, which also calls for the R scripts [`check_filtering.R`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/check_filtering.R) and
 [`plot_variants_scores2.R`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/plot_variants_scores2.R) (in the output Variant_Filtration directory).
+
+##### 2nd-pass filtering, filter genotypes
+When all low confidence variant sites are removed, filter VCF files for genotype quality.
+Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 6.
+
+##### Extract and plot DP info for each sample 
+From all samples before previous filtering. Run the following command:
+```
+for ((i=3; i<=25; i +=2)); do cut -f $i,$((i+1)) GVCFall.DP.table | awk '$1 != "./." {print $2}' > $i.DP; done
+```
+where 3-25 is odd numbers for 12 samples. This numbering is required because every sample is represented by two columns (GT, DP). 
+Split it by samples and keep only positions that have been genotyped (!="./.").
+
+##### Visualize the extracted information, plot DP distribution and define cut-off:
+Run the [`plot_DP_distribution.R`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/plot_DP_distribution.R) in R.
+
+View the content of GVCFall.DP.percentiles.txt and select the acceptable cut-off. Discard the genotypes below the 5th percentile and above the 99th percentile.
+
+##### Apply DP filtering
+Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 7, which also calls the R script [`Variant_filt_DP.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_filt_DP.sh) (in the Variant_Filtration directory).
+
+##### Set filtered sites to no call
+Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 8.
