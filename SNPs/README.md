@@ -55,4 +55,7 @@ Run script [`gatk_CreateSequenceDictionary.sh`]() argument 1.
 - I used the faidx command in samtools to prepare the fasta index file. This file describes byte offsets in the fasta file for each contig, allowing to compute exactly where a particular reference base at contig:pos is in the fasta file. This produces a text file with one record per line for each of the fasta contigs. Each record is of the: contig, size, location, basesPerLine, bytesPerLine.
 Run script [`gatk_CreateSequenceDictionary.sh`]() argument 2.
 
-
+#### Merge unalinged bam file 
+Merge unalinged bam file (now with read group info) with aligned bam file (read group info from unalinged bam is transfered to aligned bam).
+Run [`MergeBamAlignment_RUN.sh`](), which calls for the script [`MergeBamAlignment.sh`](). I tried to run all samples in array, but it did not work again, like the script above. So I run each sample individually.
+Took 13 hours for 12 samples.
