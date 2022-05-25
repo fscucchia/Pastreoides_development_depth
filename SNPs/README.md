@@ -32,12 +32,12 @@ make install
 ```
 ---
 
-### 01 FastqToSam + collect RG + MergeBamAlignment 
+### 01- FastqToSam + collect RG + MergeBamAlignment 
 
 Convert paired-fastq to BAM file (sorted by read name), add read group info (RG) to aligned reads + run the MergeBamAlignment command, which also filters the alinged read (e.g. removes secondary alignments), 
 
 #### FastqToSam
-Run [`FastqToSam_RUN.sh`](), which calls for the script [`FastqToSam.sh`]. 
+Run [`FastqToSam_RUN.sh`](), which calls for the script [`FastqToSam.sh`](). 
 Took 13 hours for 12 samples.
 
 #### Collect RG
