@@ -41,7 +41,7 @@ Run [`FastqToSam_RUN.sh`](https://github.com/fscucchia/Pastreoides_development_d
 _Took 13 hours for 12 samples._
 
 #### Collect RG
-Run [`collectRG_rgsam_RUN.sh`](), which calls for the script [`collectRG_rgsam.sh`](). I tried to run all samples in array, but for some reason it did not work.
+Run [`collectRG_rgsam_RUN.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/collectRG_rgsam_RUN.sh), which calls for the script [`collectRG_rgsam.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/collectRG_rgsam.sh). I tried to run all samples in array, but for some reason it did not work.
 So I had to run each sample individually.
 I ran it again changing R1 with R3 in the `collectRG_rgsam.sh` script. 
 _Took 10 hours for 12 samples._
