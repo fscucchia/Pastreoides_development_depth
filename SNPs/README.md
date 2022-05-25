@@ -89,8 +89,7 @@ Run scripts [`CombineGVCFs.sh`]() and [`GenotypeGVCFs.sh`](). _Together, they to
 ### 08- Select SNPs and Indels
 Run script [`Variant_Filtration.sh`]() argument 1.
 
-##### Make diagnostic plots for Variants Scores 
-#### 1st-pass filtering
+##### Make diagnostic plots for Variants Scores: 1st-pass filtering
 - Extract Variant Quality Scores and Plot  
 Run script [`Variant_Filtration.sh`]() argument 2.  
 - Make diagnostic plots for Variants Scores  
