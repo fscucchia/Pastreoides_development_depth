@@ -87,11 +87,11 @@ This assumes:
 Run scripts [`CombineGVCFs.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/CombineGVCFs.sh) and [`GenotypeGVCFs.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/GenotypeGVCFs.sh). _Together, they took 1.5 hours._
 
 ### 08- Select SNPs and Indels
-Run script [`Variant_Filtration.sh`]() argument 1.
+Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 1.
 
 ##### Make diagnostic plots for Variants Scores: 1st-pass filtering
 - Extract Variant Quality Scores and Plot  
-Run script [`Variant_Filtration.sh`]() argument 2.  
+Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 2.  
 - Make diagnostic plots for Variants Scores  
 Run the [`Diagnostic plots for Variants Scores.r`]() in R.
 
