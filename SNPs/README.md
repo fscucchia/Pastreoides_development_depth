@@ -20,5 +20,29 @@ Added the path to .bashrc
 ```
 export PATH="/data/home/mass/fscucchia/programs/gatk-4.2.0.0/:$PATH"
 ```
+2) rgsam
+
+- Download from the [github repo](https://github.com/djhshih/rgsam)
+```
+cd /data/home/mass/fscucchia/programs
+unzip rgsam-master.zip
+cd /data/home/mass/fscucchia/programs/rgsam-master
+make 
+make install
+```
 ---
+
+### 01 FastqToSam + collect RG + MergeBamAlignment 
+
+Convert paired-fastq to BAM file (sorted by read name), add read group info (RG) to aligned reads + run the MergeBamAlignment command, which also filters the alinged read (e.g. removes secondary alignments), 
+
+#### FastqToSam
+Run [`FastqToSam_RUN.sh`](), which calls for the script [`FastqToSam.sh`]. 
+Took 13 hours for 12 samples.
+
+#### Collect RG
+Run [`collectRG_rgsam_RUN.sh`](), which calls for the script [`collectRG_rgsam.sh`](). I tried to run all samples in array, but for some reason it did not work.
+So I had to run each sample individually.
+I ran it again changing R1 with R3 in the `collectRG_rgsam.sh` script. 
+Took 10 hours for 12 samples.
 
