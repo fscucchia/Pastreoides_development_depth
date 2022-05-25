@@ -182,4 +182,5 @@ I also got the error "Error: Multiple instances of '_' in sample ID", so I added
 - Run script [`genotype_plink.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/genotype_plink.sh) argument 4, which extracts the pruned SNPs data from the vcf file. 
 - Run script [`genotype_plink.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/genotype_plink.sh) argument 5, which extracts the pruned SNPs data from the vcf file.
 
-
+### 12- Fst analysis 
+- Run the R script [`Fst_analysis.R`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Fst_analysis.R).
