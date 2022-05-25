@@ -60,8 +60,14 @@ Merge unalinged bam file (now with read group info) with aligned bam file (read 
 Run [`MergeBamAlignment_RUN.sh`](), which calls for the script [`MergeBamAlignment.sh`](). I tried to run all samples in array, but it did not work again, like the script above. So I run each sample individually.
 _Took 13 hours for 12 samples._
 
-### 03- MarkDuplicates
+### 02- MarkDuplicates
 Potential PCR duplicates need to be marked with Picard Tools.
 
 - Merge read groups belonging to the same sample into a single BAM file. Run script [`MarkDuplicates.sh`]().
 _Took 5 hours._
+
+### 03- SplitNCigarReads
+The ‘CIGAR’ (Compact Idiosyncratic Gapped Alignment Report) string is how the SAM/BAM format represents spliced alignments. Understanding the CIGAR string will help you understand how your query sequence aligns to the reference genome. 
+Run script [`SplitNCigarReads.sh`](). _Took 2 days_.  
+This will split reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data), it identifies all N cigar elements and creates k+1 new reads (where k is the number of N cigar elements). 
+This is to distinguish between deletions in exons and large skips due to introns. For mRNA-to-genome alignment, an N operation represents an intron. 
