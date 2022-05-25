@@ -46,3 +46,13 @@ So I had to run each sample individually.
 I ran it again changing R1 with R3 in the `collectRG_rgsam.sh` script. 
 Took 10 hours for 12 samples.
 
+#### Prepare your reference file
+The GATK uses two files to access and safety check access to the reference files: a .dict dictionary of the contig names and sizes, and a .fai fasta index file to allow efficient random access to the reference bases. You have to generate these files in order to be able to use a fasta file as reference.
+
+- I used CreateSequenceDictionary.jar from Picard to create a .dict file from a fasta file. This produces a SAM-style header file describing the contents of the fasta file.
+Run script [`gatk_CreateSequenceDictionary.sh`]() argument 1.
+
+- I used the faidx command in samtools to prepare the fasta index file. This file describes byte offsets in the fasta file for each contig, allowing to compute exactly where a particular reference base at contig:pos is in the fasta file. This produces a text file with one record per line for each of the fasta contigs. Each record is of the: contig, size, location, basesPerLine, bytesPerLine.
+Run script [`gatk_CreateSequenceDictionary.sh`]() argument 2.
+
+
