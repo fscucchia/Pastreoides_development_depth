@@ -71,3 +71,19 @@ The ‘CIGAR’ (Compact Idiosyncratic Gapped Alignment Report) string is how th
 Run script [`SplitNCigarReads.sh`](). _Took 2 days_.  
 This will split reads that contain Ns in their cigar string (e.g. spanning splicing events in RNAseq data), it identifies all N cigar elements and creates k+1 new reads (where k is the number of N cigar elements). 
 This is to distinguish between deletions in exons and large skips due to introns. For mRNA-to-genome alignment, an N operation represents an intron. 
+
+---
+**Steps 4 and 5 are part of the GATK "Best Practices" guide but can't really be undertaken with non-model genomes** These steps in fact require "known sites", i.e. sites where we known beforehand that SNPs occure. This info is not avaliable for non-model systems. Since sites not in this list are considered putative errors that need to be corrected, these steps have to be skipped. 
+
+---
+
+### 06- HaplotypeCaller
+Run script [`HaplotypeCaller`](). _Took almost 2 days_.
+This assumes:
+--sample-ploidy 2 (default)
+--heterozygosity 0.001 (deafult; dont have prior info to update this with)
+
+### 07- Combine *.g.vcf.gz files and call genotypes
+Run scripts [`CombineGVCFs.sh`]() and [`GenotypeGVCFs.sh`](). _Together, they took 1.5 hours._
+
+
