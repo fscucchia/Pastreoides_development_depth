@@ -30,6 +30,14 @@ cd /data/home/mass/fscucchia/programs/rgsam-master
 make 
 make install
 ```
+3) PLINK
+
+- Download PLINK from [here](https://www.cog-genomics.org/plink2)
+
+- Added to bashrc
+```
+export PATH="/data/home/mass/fscucchia/programs/plink2:$PATH"
+```
 ---
 
 ### 01- FastqToSam + collect RG + MergeBamAlignment 
@@ -158,5 +166,20 @@ Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_de
 ### 10- VCF to Table 
 Run script [`Variant_Filtration.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/Variant_Filtration.sh) argument 11. 
 Got my output files (genotype tables) and vcf files ready for subsequent analyses.
+
+### 11- Filtering for linkage disequilibrium 
+- Run script [`genotype_plink.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/genotype_plink.sh) argument 1, which manually sets the variant ID in the final vcf file (it replaces the dot in the ID column with a manually set ID). This is needed for argument 4 to work.
+- Run script [`genotype_plink.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/genotype_plink.sh) argument 2, which converts the vcf file into a bed file.
+
+<details>
+<summary>Troubleshooting tips!</summary>
+<br>
+I got the error "Error: _____ cannot contain multiallelic variants" while trying to make the bed file, so I added `--max-alleles 2` in the command.
+I also got the error "Error: Multiple instances of '_' in sample ID", so I added `--double-id` in the command.
+</details>
+
+- Run script [`genotype_plink.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/genotype_plink.sh) argument 3, which performs the pruning of SNPs that are strongly genetically linked. 
+- Run script [`genotype_plink.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/genotype_plink.sh) argument 4, which extracts the pruned SNPs data from the vcf file. 
+- Run script [`genotype_plink.sh`](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/SNPs/genotype_plink.sh) argument 5, which extracts the pruned SNPs data from the vcf file.
 
 
