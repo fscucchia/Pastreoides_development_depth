@@ -95,3 +95,24 @@ datExpr <- as.data.frame(t(assay(gvst))) #transpose to output to a new data fram
 #Check for genes and samples with too many missing values with goodSamplesGenes. There shouldn't be any because we performed pre-filtering
 gsg = goodSamplesGenes(datExpr, verbose = 3)
 # [1] allOK is TRUE
+
+# Cluster the samples to look for obvious outliers
+#Look for outliers by examining the sample tree:
+
+sampleTree = hclust(dist(datExpr), method = "average")
+
+# Plot the sample tree
+pdf(paste0('sampleTree','.pdf'))
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5, cex.axis = 1.5, cex.main = 2)
+dev.off()
+
+### Network construction and consensus module detection
+# Choosing a soft-thresholding power: Analysis of network topology 
+# The soft thresholding power is the number to which the co-expression similarity is raised to calculate adjacency. 
+
+#Choose a set of soft-thresholding powers
+powers <- c(seq(from = 1, to=19, by=2), c(21:30)) #Create a string of numbers from 1 through 10, and even numbers from 10 through 20
+powerVector = c(seq(1, 10, by = 1), seq(12, 20, by = 2))
+
+#Call the network topology analysis function
+sft <-pickSoftThreshold(datExpr, powerVector = powers, verbose = 5)
