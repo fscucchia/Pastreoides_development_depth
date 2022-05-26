@@ -530,7 +530,7 @@ expressionProfile_data <- as.data.frame(cbind(group = Strader_MEs$group, cluster
 # 5 adult_shal  -0.250461149130286 0.0351985753526948 -0.0950156522179035
 # 6 adult_shal  -0.237314687600277 0.0485129182101299 -0.0695585278294926
 
-# save data for selected clusters
+# save data of selected clusters for GO enrichment analysis
 
 ### save mean eigengene values for cluster9
 meanEigenClust9 <- expressionProfile_data$cluster9
@@ -827,12 +827,47 @@ expressionProfiles <- (Cluster1Plot + Cluster2Plot + Cluster3Plot) / (Cluster4Pl
 ggsave("/data/home/mass/fscucchia/Bermuda/output/WGCNA/expression_eigengene_Profiles_withMean.pdf", expressionProfiles, height = 25, width = 28, units = "in")
       
 save.image()         
+```    
         
+### Gene Significance and Module Membership        
+```       
+# We quantify associations of individual genes with age-depth groups by defining Gene Significance GS as the absolute value of the correlation between the gene 
+# and the group. For each module, we also define a quantitative measure of module membership MM as the correlation of the module eigengene and the gene 
+# expression profile.
+
+# Define variable weight containing the weight column of datTrait
+group <- as.data.frame(c(1,1,1,
+                              2,2,2,
+                              3,3,3,
+                              4,4,4
+                              ))
+names(group) = "group"
+dim(group)
+## [1] 12  1        
         
-        
-        
-        
-        
+#Colors of the modules
+
+modNames = substring(names(MEs), 3)
+
+geneModuleMembership = as.data.frame(cor(datExpr, MEs, use = "p"));
+MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamples));
+
+names(geneModuleMembership) = paste("MM", modNames, sep="");
+names(MMPvalue) = paste("p.MM", modNames, sep="");
+
+geneTraitSignificance = as.data.frame(cor(datExpr, group, use = "p"));
+GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance), nSamples));
+
+names(geneTraitSignificance) = paste("GS.", names(group), sep="");
+names(GSPvalue) = paste("p.GS.", names(group), sep="")
+
+## Summary output of network analysis results
+# Make a dataframe that connects traits, genes, and gene annotation
+
+#Import annotation file.
+annot_final <- read.csv("Past_annot.csv", header = TRUE, sep = ",")[,-1]
+GO.annot <- subset(annot_final, select= c(SeqName, Length, GO_IDs)) #Select only relevant information
+
         
         
         
