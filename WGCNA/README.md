@@ -27,7 +27,7 @@ library("patchwork")            #install.packages("patchwork")
 library("dplyr")
 
 #treatment information
-treatmentinfo <- read.csv("RNAseq_data4.csv", header = TRUE, sep = ";")
+treatmentinfo <- read.csv("RNAseq_data.csv", header = TRUE, sep = ";")
 
 #gene count matrix
 gcount <- as.data.frame(read.csv("gene_count_matrix.csv", row.names="gene_id"), colClasses = double)
@@ -58,3 +58,40 @@ nrow(gcount) #Before
 
 nrow(gcount_filt) #After
 # [1] 35776
+```
+
+### Read normalization
+```
+# Normalize our read counts using VST-normalization in DESeq2
+# Construct the DESeq2 dataset
+
+#Merge the age and depth columns into a new column, group. Set group as a factor.
+treatmentinfo$group <- factor(treatmentinfo$group, levels = c("adult_meso","adult_shal","planu_meso", "planu_shal"))
+
+treatmentinfo$depth <- factor(treatmentinfo$depth)
+
+#Create a DESeqDataSet design from gene count matrix and labels. Here we set the design to look at 
+#any differences in gene expression across samples attributed to depth.
+
+#Set DESeq2 design
+gdds <- DESeqDataSetFromMatrix(countData = gcount_filt,
+                                  colData = treatmentinfo,
+                                  design = ~depth)
+
+# Log-transform the count data using a variance stabilizing transforamtion (vst). 
+
+SF.gdds <- estimateSizeFactors( gdds ) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than for to use vst
+print(sizeFactors(SF.gdds)) #View size factors
+
+gvst <- vst(gdds, blind=FALSE) #apply a variance stabilizing transforamtion to minimize effects of small counts and normalize wrt library size
+```
+
+### Compile WGCNA Dataset
+```
+# Transpose the filtered gene count matrix so that the gene IDs are rows and the sample IDs are columns.
+
+datExpr <- as.data.frame(t(assay(gvst))) #transpose to output to a new data frame with the column names as row names. And make all data numeric
+
+#Check for genes and samples with too many missing values with goodSamplesGenes. There shouldn't be any because we performed pre-filtering
+gsg = goodSamplesGenes(datExpr, verbose = 3)
+# [1] allOK is TRUE
