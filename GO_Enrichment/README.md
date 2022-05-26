@@ -26,3 +26,9 @@ head(treatmentinfo)
 #gene count matrix
 gcount <- as.data.frame(read.csv("gene_count_matrix.csv", row.names="gene_id"))
 gcount$gene_id <- rownames(gcount)
+
+#DESeq2 result
+DEG.res <- read.csv("DEGs_adult_cluster.csv")[,-1] #this is the output of the DE script https://github.com/fscucchia/Pastreoides_development_depth/tree/main/DE
+
+#Load Past annotations
+annot_final <- read.csv("Past_annot.csv", header = TRUE, sep = ",")[,-1]
