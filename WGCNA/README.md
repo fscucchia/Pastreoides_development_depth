@@ -530,4 +530,324 @@ expressionProfile_data <- as.data.frame(cbind(group = Strader_MEs$group, cluster
 # 5 adult_shal  -0.250461149130286 0.0351985753526948 -0.0950156522179035
 # 6 adult_shal  -0.237314687600277 0.0485129182101299 -0.0695585278294926
 
+# save data for selected clusters
+
+### save mean eigengene values for cluster9
+meanEigenClust9 <- expressionProfile_data$cluster9
+write.csv(meanEigenClust9, file = "meanEigenClust9.csv")
+write.csv(C9_Strader_MEs, file = "C9_Strader_MEs.csv")
+
+### save mean eigengene values for cluster2
+meanEigenClust2 <- expressionProfile_data$cluster2
+write.csv(meanEigenClust2, file = "meanEigenClust2.csv")
+write.csv(C2_Strader_MEs, file = "C2_Strader_MEs.csv")
+
+### save mean eigengene values for cluster3
+meanEigenClust3 <- expressionProfile_data$cluster3
+write.csv(meanEigenClust3, file = "meanEigenClust3.csv")
+write.csv(C3_Strader_MEs, file = "C3_Strader_MEs.csv")
+
+### save mean eigengene values for cluster4
+meanEigenClust4 <- expressionProfile_data$cluster4
+write.csv(meanEigenClust4, file = "meanEigenClust4.csv")
+write.csv(C4_Strader_MEs, file = "C4_Strader_MEs.csv")
+
+### save mean eigengene values for cluster5
+meanEigenClust5 <- expressionProfile_data$cluster5
+write.csv(meanEigenClust5, file = "meanEigenClust5.csv")
+write.csv(C5_Strader_MEs, file = "C5_Strader_MEs.csv")
+
+### save mean eigengene values for cluster6
+meanEigenClust6 <- expressionProfile_data$cluster6
+write.csv(meanEigenClust6, file = "meanEigenClust6.csv")
+write.csv(C6_Strader_MEs, file = "C6_Strader_MEs.csv")
+
+### save mean eigengene values for cluster7
+meanEigenClust7 <- expressionProfile_data$cluster7
+write.csv(meanEigenClust7, file = "meanEigenClust7.csv")
+write.csv(C7_Strader_MEs, file = "C7_Strader_MEs.csv")
+
+### save mean eigengene values for cluster8
+meanEigenClust8 <- expressionProfile_data$cluster8
+write.csv(meanEigenClust8, file = "meanEigenClust8.csv")
+write.csv(C8_Strader_MEs, file = "C8_Strader_MEs.csv")
+
+### save mean eigengene values for cluster10
+meanEigenClust10 <- expressionProfile_data$cluster10
+write.csv(meanEigenClust10, file = "meanEigenClust10.csv")
+write.csv(C10_Strader_MEs, file = "C10_Strader_MEs.csv")
+
+expressionProfile_data$group
+#  [1] adult_meso adult_meso adult_meso planu_meso planu_meso planu_meso
+#  [7] adult_shal adult_shal adult_shal planu_shal planu_shal planu_shal
+
+#cols.num <- c(2:11)
+#expressionProfile_data[cols.num] <- sapply(expressionProfile_data[cols.num],as.numeric)
+
+#I want clusters to be numeric, not factors, so I'm using the following custom-made function. Simply using 'as.numeric' I loose the real numbers
+as.double.factor <- function(x) {as.numeric(levels(x))[x]}
+
+expressionProfile_data$cluster1 <- as.double.factor(expressionProfile_data$cluster1)
+expressionProfile_data$cluster2 <- as.double.factor(expressionProfile_data$cluster2)
+expressionProfile_data$cluster3 <- as.double.factor(expressionProfile_data$cluster3)
+expressionProfile_data$cluster4 <- as.double.factor(expressionProfile_data$cluster4)
+expressionProfile_data$cluster5 <- as.double.factor(expressionProfile_data$cluster5)
+expressionProfile_data$cluster6 <- as.double.factor(expressionProfile_data$cluster6)
+expressionProfile_data$cluster7 <- as.double.factor(expressionProfile_data$cluster7)
+expressionProfile_data$cluster8 <- as.double.factor(expressionProfile_data$cluster8)
+expressionProfile_data$cluster9 <- as.double.factor(expressionProfile_data$cluster9)
+expressionProfile_data$cluster10 <- as.double.factor(expressionProfile_data$cluster10)
+
+sapply(expressionProfile_data, class)
+# [1] group  cluster1  cluster2  cluster3  cluster4  cluster5  cluster6  cluster7
+#  "factor" "numeric" "numeric" "numeric" "numeric" "numeric" "numeric" "numeric"
+#  cluster8  cluster9 cluster10
+# "numeric" "numeric" "numeric"
+
+dim(expressionProfile_data)
+## [1] 12 11
+
+head(expressionProfile_data)
+# [1] group    cluster1    cluster2    cluster3   cluster4    cluster5
+# 1 adult_meso  0.58588123  0.63036072  0.53903919 -0.4736502 -0.63565922
+# 2 adult_meso -0.05834040 -0.38248670  0.24121605  0.1462451 -0.27857870
+# 3 adult_meso  0.01324388 -0.26221479  0.19610474  0.0909247 -0.16717489
+# 4 adult_shal -0.20936222  0.04018596 -0.07815541 -0.1235222  0.13631320
+# 5 adult_shal -0.25046115  0.03519858 -0.09501565 -0.1015075  0.16057242
+# 6 adult_shal -0.23731469  0.04851292 -0.06955853 -0.1218356  0.06026255
+# cluster6    cluster7    cluster8      cluster9    cluster10
+# 1 -0.33672214 -0.30346871 -0.39775372 -0.3318417164 -0.267733931
+# 2  0.50465593 -0.08298309 -0.12788174 -0.3105298325 -0.265765798
+# 3  0.38693015 -0.13847057 -0.04473957 -0.0239674379  0.055608936
+# 4 -0.09352185 -0.22173862  0.30281299 -0.0463440475 -0.005688943
+# 5 -0.08472144 -0.21426293  0.30350763 -0.0476323488 -0.009738099
+# 6 -0.06542271  0.17989101  0.19176986  0.0005811147  0.024004654
+```
+
+### Plot mean module eigengene for each cluster
+```
+library(ggplot2)
+
+group_order = c("adult_meso", "adult_shal", "planu_meso", "planu_shal")
+
+Cluster1Plot <- expressionProfile_data %>%
+        select(group, cluster1) %>% 
+  #group_by(group) %>% 
+  ggplot(aes(x=group, y=cluster1, fill=group)) +
+  geom_boxplot(width=.5, outlier.shape= NA, position = position_dodge(width = 0.5), alpha = 0.7) +
+  #stat_summary(fun=mean, geom="line", aes(group=group, color = group), position = position_dodge(width = 0.5))  + 
+  stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red")  + 
+  geom_point(pch = 21, size=5, position = position_dodge(width = 1)) +
+  scale_fill_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  scale_color_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) + 
+        scale_x_discrete(labels=c("adult_meso" ="adult_meso", "adult_shal", "planu_meso", "planu_shal")) +
+        xlab("Group") + #Axis titles
+  #ylim(-0.5,1) +
+  ylab("Mean Module Eigenegene") +
+  ggtitle("1)") +
+  theme_bw() + theme(panel.border = element_rect(color="black", fill=NA, size=0.75), panel.grid.major = element_blank(), #Makes background theme white
+                     panel.grid.minor = element_blank(), axis.line = element_blank()) +
+  theme(axis.text = element_text(size = 15, color = "black"),
+        axis.title = element_text(size = 18, color = "black"))+
+        geom_hline(yintercept = 0, linetype="dashed", color = "grey") 
+
+Cluster2Plot <- expressionProfile_data %>%
+        select(group, cluster2) %>% 
+  #group_by(group) %>% 
+  ggplot(aes(x=group, y=cluster2, fill=group)) +
+  geom_boxplot(width=.5, outlier.shape= NA, position = position_dodge(width = 0.5), alpha = 0.7) +
+  stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red")  + 
+  geom_point(pch = 21, size=5, position = position_dodge(width = 1)) +
+  scale_fill_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  scale_color_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) + 
+        scale_x_discrete(labels=c("adult_meso" ="adult_meso", "adult_shal", "planu_meso", "planu_shal")) +
+        xlab("Group") + #Axis titles
+  #ylim(-0.5,1) +
+  ylab("Mean Module Eigenegene") +
+  ggtitle("2)") +
+  theme_bw() + theme(panel.border = element_rect(color="black", fill=NA, size=0.75), panel.grid.major = element_blank(), #Makes background theme white
+                     panel.grid.minor = element_blank(), axis.line = element_blank()) +
+  theme(axis.text = element_text(size = 15, color = "black"),
+        axis.title = element_text(size = 18, color = "black"))+
+        geom_hline(yintercept = 0, linetype="dashed", color = "grey") 
+
+Cluster3Plot <- expressionProfile_data %>%
+        select(group, cluster3) %>% 
+  #group_by(group) %>% 
+  ggplot(aes(x=group, y=cluster3, fill=group)) +
+  geom_boxplot(width=.5, outlier.shape= NA, position = position_dodge(width = 0.5), alpha = 0.7) +
+  stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red")  + 
+  geom_point(pch = 21, size=5, position = position_dodge(width = 1)) +
+  scale_fill_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  scale_color_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) + 
+        scale_x_discrete(labels=c("adult_meso" ="adult_meso", "adult_shal", "planu_meso", "planu_shal")) +
+        xlab("Group") + #Axis titles
+  #ylim(-0.5,1) +
+  ylab("Mean Module Eigenegene") +
+  ggtitle("3)") +
+  theme_bw() + theme(panel.border = element_rect(color="black", fill=NA, size=0.75), panel.grid.major = element_blank(), #Makes background theme white
+                     panel.grid.minor = element_blank(), axis.line = element_blank()) +
+  theme(axis.text = element_text(size = 15, color = "black"),
+        axis.title = element_text(size = 18, color = "black"))+
+        geom_hline(yintercept = 0, linetype="dashed", color = "grey") 
+
+Cluster4Plot <- expressionProfile_data %>%
+        select(group, cluster4) %>% 
+  #group_by(group) %>% 
+  ggplot(aes(x=group, y=cluster4, fill=group)) +
+  geom_boxplot(width=.5, outlier.shape= NA, position = position_dodge(width = 0.5), alpha = 0.7) +
+  stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red")  + 
+  geom_point(pch = 21, size=5, position = position_dodge(width = 1)) +
+  scale_fill_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  scale_color_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) + 
+        scale_x_discrete(labels=c("adult_meso" ="adult_meso", "adult_shal", "planu_meso", "planu_shal")) +
+        xlab("Group") + #Axis titles
+  #ylim(-0.5,1) +
+  ylab("Mean Module Eigenegene") +
+  ggtitle("4)") +
+ theme_bw() + theme(panel.border = element_rect(color="black", fill=NA, size=0.75), panel.grid.major = element_blank(), #Makes background theme white
+                     panel.grid.minor = element_blank(), axis.line = element_blank()) +
+  theme(axis.text = element_text(size = 15, color = "black"),
+        axis.title = element_text(size = 18, color = "black"))+
+        geom_hline(yintercept = 0, linetype="dashed", color = "grey") 
+        
+ Cluster5Plot <- expressionProfile_data %>%
+        select(group, cluster5) %>% 
+  #group_by(group) %>% 
+  ggplot(aes(x=group, y=cluster5, fill=group)) +
+  geom_boxplot(width=.5, outlier.shape= NA, position = position_dodge(width = 0.5), alpha = 0.7) +
+  stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red")  + 
+  geom_point(pch = 21, size=5, position = position_dodge(width = 1)) +
+  scale_fill_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  scale_color_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) + 
+        scale_x_discrete(labels=c("adult_meso" ="adult_meso", "adult_shal", "planu_meso", "planu_shal")) +
+        xlab("Group") + #Axis titles
+  ggtitle("5)") +
+  theme_bw() + theme(panel.border = element_rect(color="black", fill=NA, size=0.75), panel.grid.major = element_blank(), #Makes background theme white
+                     panel.grid.minor = element_blank(), axis.line = element_blank()) +
+  theme(axis.text = element_text(size = 15, color = "black"),
+        axis.title = element_text(size = 18, color = "black"))+
+        geom_hline(yintercept = 0, linetype="dashed", color = "grey") 
+        
+  Cluster6Plot <- expressionProfile_data %>%
+        select(group, cluster6) %>% 
+  #group_by(group) %>% 
+  ggplot(aes(x=group, y=cluster6, fill=group)) +
+  geom_boxplot(width=.5, outlier.shape= NA, position = position_dodge(width = 0.5), alpha = 0.7) +
+  stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red")  + 
+  geom_point(pch = 21, size=5, position = position_dodge(width = 1)) +
+  scale_fill_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  scale_color_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) + 
+        scale_x_discrete(labels=c("adult_meso" ="adult_meso", "adult_shal", "planu_meso", "planu_shal")) +
+        xlab("Group") + #Axis titles
+  ggtitle("6)") +
+  theme_bw() + theme(panel.border = element_rect(color="black", fill=NA, size=0.75), panel.grid.major = element_blank(), #Makes background theme white
+                     panel.grid.minor = element_blank(), axis.line = element_blank()) +
+  theme(axis.text = element_text(size = 15, color = "black"),
+        axis.title = element_text(size = 18, color = "black"))+
+        geom_hline(yintercept = 0, linetype="dashed", color = "grey") 
+        
+Cluster7Plot <- expressionProfile_data %>%
+        select(group, cluster7) %>% 
+  #group_by(group) %>% 
+  ggplot(aes(x=group, y=cluster7, fill=group)) +
+  geom_boxplot(width=.5, outlier.shape= NA, position = position_dodge(width = 0.5), alpha = 0.7) +
+  stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red")  + 
+  geom_point(pch = 21, size=5, position = position_dodge(width = 1)) +
+  scale_fill_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  scale_color_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) + 
+        scale_x_discrete(labels=c("adult_meso" ="adult_meso", "adult_shal", "planu_meso", "planu_shal")) +
+        xlab("Group") + #Axis titles
+  ggtitle("7)") +
+  theme_bw() + theme(panel.border = element_rect(color="black", fill=NA, size=0.75), panel.grid.major = element_blank(), #Makes background theme white
+                     panel.grid.minor = element_blank(), axis.line = element_blank()) +
+  theme(axis.text = element_text(size = 15, color = "black"),
+        axis.title = element_text(size = 18, color = "black"))+
+        geom_hline(yintercept = 0, linetype="dashed", color = "grey")
+        
+Cluster8Plot <- expressionProfile_data %>%
+        select(group, cluster8) %>% 
+  #group_by(group) %>% 
+  ggplot(aes(x=group, y=cluster8, fill=group)) +
+  geom_boxplot(width=.5, outlier.shape= NA, position = position_dodge(width = 0.5), alpha = 0.7) +
+  stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red")  + 
+  geom_point(pch = 21, size=5, position = position_dodge(width = 1)) +
+  scale_fill_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  scale_color_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) + 
+        scale_x_discrete(labels=c("adult_meso" ="adult_meso", "adult_shal", "planu_meso", "planu_shal")) +
+        xlab("Group") + #Axis titles
+  ggtitle("8)") +
+  theme_bw() + theme(panel.border = element_rect(color="black", fill=NA, size=0.75), panel.grid.major = element_blank(), #Makes background theme white
+                     panel.grid.minor = element_blank(), axis.line = element_blank()) +
+  theme(axis.text = element_text(size = 15, color = "black"),
+        axis.title = element_text(size = 18, color = "black"))+
+        geom_hline(yintercept = 0, linetype="dashed", color = "grey") 
+        
+ Cluster9Plot <- expressionProfile_data %>%
+  select(group, cluster9) %>% 
+  #group_by(group) %>% 
+  ggplot(aes(x=group, y=cluster9, fill=group)) +
+  geom_boxplot(width=.5, outlier.shape= NA, position = position_dodge(width = 0.5), alpha = 0.7) +
+  stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red")  + 
+  geom_point(pch = 21, size=5, position = position_dodge(width = 1)) +
+  scale_fill_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  scale_color_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) + 
+        scale_x_discrete(labels=c("adult_meso" ="adult_meso", "adult_shal", "planu_meso", "planu_shal")) +
+        xlab("Group") + #Axis titles
+  ggtitle("9)") +
+  theme_bw() + theme(panel.border = element_rect(color="black", fill=NA, size=0.75), panel.grid.major = element_blank(), #Makes background theme white
+                     panel.grid.minor = element_blank(), axis.line = element_blank()) +
+  theme(axis.text = element_text(size = 15, color = "black"),
+        axis.title = element_text(size = 18, color = "black"))+
+        geom_hline(yintercept = 0, linetype="dashed", color = "grey")
+        
+ Cluster10Plot <- expressionProfile_data %>%
+        select(group, cluster10) %>% 
+  #group_by(group) %>% 
+  ggplot(aes(x=group, y=cluster10, fill=group)) +
+  geom_boxplot(width=.5, outlier.shape= NA, position = position_dodge(width = 0.5), alpha = 0.7) +
+  stat_summary(fun=mean, geom="point", shape=20, size=14, color="red", fill="red")  + 
+  geom_point(pch = 21, size=5, position = position_dodge(width = 1)) +
+  scale_fill_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) +
+  scale_color_manual(values = c("adult_meso"="blue", "adult_shal"="indianred3", "planu_meso"="deepskyblue", "planu_shal"="orange")) + 
+        scale_x_discrete(labels=c("adult_meso" ="adult_meso", "adult_shal", "planu_meso", "planu_shal")) +
+        xlab("Group") + #Axis titles
+  ggtitle("10)") +
+  theme_bw() + theme(panel.border = element_rect(color="black", fill=NA, size=0.75), panel.grid.major = element_blank(), #Makes background theme white
+                     panel.grid.minor = element_blank(), axis.line = element_blank()) +
+  theme(axis.text = element_text(size = 15, color = "black"),
+        axis.title = element_text(size = 18, color = "black"))+
+        geom_hline(yintercept = 0, linetype="dashed", color = "grey") 
+        
+#Compile plots into 1 graph and save
+expressionProfiles <- cowplot::plot_grid(Cluster1Plot, Cluster2Plot, Cluster3Plot, Cluster4Plot, Cluster5Plot,Cluster6Plot,Cluster7Plot,Cluster8Plot,Cluster9Plot,Cluster10Plot, align = "v", ncol = 3, nrow = 4)
+
+library(patchwork)
+expressionProfiles <- (Cluster1Plot + Cluster2Plot + Cluster3Plot) / (Cluster4Plot + Cluster5Plot + Cluster6Plot) / (Cluster7Plot + Cluster8Plot + Cluster9Plot)/ (Cluster10Plot+Cluster10Plot+Cluster10Plot)
+ggsave("/data/home/mass/fscucchia/Bermuda/output/WGCNA/expression_eigengene_Profiles_withMean.pdf", expressionProfiles, height = 25, width = 28, units = "in")
+      
+save.image()         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+
+
+
+
+
 
