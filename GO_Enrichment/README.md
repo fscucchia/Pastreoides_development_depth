@@ -175,8 +175,155 @@ write.csv(C2.GO.sigp_planulae, file = "C2.GO.sigp_planulae.csv", row.names = FAL
 
 ### GO Enrichment - WGCNA Data 
 ```
+setwd("/data/home/mass/fscucchia/Bermuda/output/WGCNA")
+load(".RData") #load all WCGNA data
+
+#Prepare dataframe
+genes.GO <- as.data.frame(t(datExpr))
+genes.GO <- cbind(gene_id = rownames(genes.GO), genes.GO)
+rownames(genes.GO) <- NULL
+
+head(genes.GO)
+# [1]       gene_id      D20      D21      D22        L7        L8        L9
+# 1 Pastreoides01556 4.372019 4.372019 4.372019  4.372019  6.353233  6.146853
+# 2 Pastreoides37429 4.372019 6.525170 5.977893  7.810618  8.158924  7.427095
+# 3 Pastreoides47565 4.372019 6.897309 7.535716  9.190954  9.277749  8.973132
+# 4 Pastreoides47564 4.372019 8.246516 8.384271  9.567475  9.538375  8.995897
+# 5 Pastreoides48395 4.372019 5.958641 5.727800  4.990296  4.974196  5.337775
+# 6 Pastreoides47566 7.903908 8.644152 8.889982 11.205382 11.347467 11.173282
+#       R13B     R15B      R33        S4        S5        S7
+# 1 4.372019 4.372019 4.372019  5.385981  5.232322  5.464851
+# 2 6.324533 7.206471 7.095487  7.300074  7.339899  7.140677
+# 3 6.857971 6.872340 7.886073  9.316904  9.383418  9.299059
+# 4 8.168371 8.157733 8.090708  9.508662  9.662097  9.380658
+# 5 4.372019 6.427276 6.887108  6.964790  6.639221  7.210621
+# 6 8.938027 8.797427 8.465760 11.348584 11.344754 11.234663
+
+### Select interesting Clusters (the ones with a pattern by depth)
+#here I looked at the difference in mean module eigengene value (boxplot profiles) and decided to analyze cluster 5 and 7, that are the ones that 
+#show the greater change in mean value in the meso vs shal adult comparison and in the meso vs shal planulae comparison.
+
+## Cluster 5 modules
+genes_clust5.GO <- genes.GO[,c(1:13)]
+geneColor <- geneInfo %>% select(gene_id, moduleColor) #Make a dataframe containing just gene_id and moduleColor
+
+module_cluster5 <- geneColor %>% filter(moduleColor == "thistle3" | moduleColor == "bisque4"| moduleColor == "coral3" | moduleColor == "coral1" | moduleColor == "turquoise")  #Make a dataframe containing just gene_id and moduleColor of cluster1
+
+geneColor$gene_id <- as.factor(geneColor$gene_id) #Make factor for merge
+genes_clust5.GO$gene_id <- as.factor(genes_clust5.GO$gene_id) #Make factor for merge
+genes_clust5.GO <- merge(module_cluster5, genes_clust5.GO)
 
 
+## Cluster 7 modules
+genes_clust7.GO <- genes.GO[,c(1:13)]
+geneColor <- geneInfo %>% select(gene_id, moduleColor) #Make a dataframe containing just gene_id and moduleColor
 
+module_cluster7 <- geneColor %>% filter(moduleColor == "indianred3" | moduleColor == "brown2"| moduleColor == "paleturquoise")  #Make a dataframe containing just gene_id and moduleColor of cluster1
 
+geneColor$gene_id <- as.factor(geneColor$gene_id) #Make factor for merge
+genes_clust7.GO$gene_id <- as.factor(genes_clust7.GO$gene_id) #Make factor for merge
+genes_clust7.GO <- merge(module_cluster7, genes_clust7.GO)
 
+#Build a data frame that links the gene IDs, modules, and counts of expressed genes and the gene lengths.
+
+GOref <- merge(genes.GO, GO.annot, by.x="gene_id")
+GOref <- merge(genes.GO, GO.annot, by ="gene_id")
+head(GOref)
+dim(GOref)
+
+##GOseq requires a vector of all genes and all differentially expressed genes. 
+
+####### Cluster 5 ######
+cluster5_gene.vector <- as.vector(genes_clust5.GO$gene_id)
+cluster5_gene.vector=as.integer(GOref$gene_id %in% cluster5_gene.vector)
+names(cluster5_gene.vector)=GOref$gene_id
+head(cluster5_gene.vector)
+
+cluster5_ID.vector <- as.character(GOref$gene_id) #Make ID vector
+head(cluster5_ID.vector)
+dim(cluster5_ID.vector)
+cluster5_Length.vector <- GOref$length #Make length vector
+head(cluster5_Length.vector)
+
+#Calculate Probability Weighting Function
+pwf.cluster5 <- nullp(cluster5_gene.vector, cluster5_ID.vector, bias.data=cluster5_Length.vector) #weight vector by length of gene
+
+#Prepare GO term dataframe
+GO.annot <- select(geneInfo, gene_id, Annotation.GO.ID)
+splitted <- strsplit(as.character(GO.annot$Annotation.GO.ID), ";") #split into multiple GO ids
+GO.terms <- data.frame(v1 = rep.int(GO.annot$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms) <- c("gene_id", "GO.ID")
+head(GO.terms)
+tail(GO.terms)
+
+GO.terms$GO.ID<- as.character(GO.terms$GO.ID)
+GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown")
+GO.terms$GO.ID <- as.factor(GO.terms$GO.ID)
+GO.terms$gene_id <- as.factor(GO.terms$gene_id)
+GO.terms$GO.ID <- gsub(" ", "", GO.terms$GO.ID)
+dim(GO.terms)
+
+##Find enriched GO terms, "selection-unbiased testing for category enrichment amongst significantly expressed genes for RNA-seq data"
+GOwall.cluster5<- goseq(pwf.cluster5, GOref$gene_id, gene2cat=GO.terms, test.cats=c("GO:CC", "GO:BP", "GO:MF"), method="Wallenius", use_genes_without_cat=TRUE)
+dim(GOwall.cluster5)
+head(GOwall.cluster5)
+
+#Find only enriched GO terms that are statistically significant at cutoff
+cluster5.GO.05<-GOwall.cluster5$category[GOwall.cluster5$over_represented_pvalue<.05]
+cluster5.GO.05<-data.frame(cluster5.GO.05)
+colnames(cluster5.GO.05) <- c("category")
+cluster5.GO.05 <- merge(cluster5.GO.05, GOwall.cluster5, by="category")
+cluster5.GO.05 <- cluster5.GO.05[order(cluster5.GO.05$ontology, cluster5.GO.05$over_represented_pvalue, -cluster5.GO.05$numDEInCat),]
+cluster5.GO.05$term <- as.factor(cluster5.GO.05$term)
+dim(cluster5.GO.05) #Number of sig GO terms
+
+#Save significant terms
+write.csv(cluster5.GO.05, file = "GO.05.cluster5.csv", row.names = FALSE)
+
+####### Cluster 7 ######
+cluster7_gene.vector <- as.vector(genes_clust7.GO$gene_id)
+cluster7_gene.vector=as.integer(GOref$gene_id %in% cluster7_gene.vector)
+names(cluster7_gene.vector)=GOref$gene_id
+head(cluster7_gene.vector)
+
+cluster7_ID.vector <- as.character(GOref$gene_id) #Make ID vector
+head(cluster7_ID.vector)
+dim(cluster7_ID.vector)
+cluster7_Length.vector <- GOref$length #Make length vector
+head(cluster7_Length.vector)
+
+#Calculate Probability Weighting Function
+pwf.cluster7 <- nullp(cluster7_gene.vector, cluster7_ID.vector, bias.data=cluster7_Length.vector) #weight vector by length of gene
+
+#Prepare GO term dataframe
+GO.annot <- select(geneInfo, gene_id, Annotation.GO.ID)
+splitted <- strsplit(as.character(GO.annot$Annotation.GO.ID), ";") #split into multiple GO ids
+GO.terms <- data.frame(v1 = rep.int(GO.annot$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms) <- c("gene_id", "GO.ID")
+head(GO.terms)
+tail(GO.terms)
+
+GO.terms$GO.ID<- as.character(GO.terms$GO.ID)
+GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown")
+GO.terms$GO.ID <- as.factor(GO.terms$GO.ID)
+GO.terms$gene_id <- as.factor(GO.terms$gene_id)
+GO.terms$GO.ID <- gsub(" ", "", GO.terms$GO.ID)
+dim(GO.terms)
+
+##Find enriched GO terms, "selection-unbiased testing for category enrichment amongst significantly expressed genes for RNA-seq data"
+GOwall.cluster7<- goseq(pwf.cluster7, GOref$gene_id, gene2cat=GO.terms, test.cats=c("GO:CC", "GO:BP", "GO:MF"), method="Wallenius", use_genes_without_cat=TRUE)
+dim(GOwall.cluster7)
+head(GOwall.cluster7)
+
+#Find only enriched GO terms that are statistically significant at cutoff
+cluster7.GO.05<-GOwall.cluster7$category[GOwall.cluster7$over_represented_pvalue<.05]
+cluster7.GO.05<-data.frame(cluster7.GO.05)
+colnames(cluster7.GO.05) <- c("category")
+cluster7.GO.05 <- merge(cluster7.GO.05, GOwall.cluster7, by="category")
+cluster7.GO.05 <- cluster7.GO.05[order(cluster7.GO.05$ontology, cluster7.GO.05$over_represented_pvalue, -cluster7.GO.05$numDEInCat),]
+cluster7.GO.05$term <- as.factor(cluster7.GO.05$term)
+dim(cluster7.GO.05) #Number of sig GO terms
+
+#Save significant terms
+write.csv(cluster7.GO.05, file = "GO.05.cluster7.csv", row.names = FALSE)
+```
