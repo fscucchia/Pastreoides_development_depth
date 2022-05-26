@@ -28,4 +28,4 @@ To assess genetic differentiation among age-depth groups, the fixation index (_F
 
 ### Gene ontology enrichment
 
-**[Coral host gene ontology enrichment analysis](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/GO_Enrichment)** - GO annotation of the _P. astreoides_ genome was retrieved from the [Past_Genome Project](https://osf.io/ed8xu/). GO enrichment analysis was performed for both the DE and WGCNA data using the package Goseq (v1.42.0; ([Young et al. 2010](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-2-r14)) in the R environment.  
+**[Coral host gene ontology enrichment analysis](https://github.com/fscucchia/Pastreoides_development_depth/tree/main/GO_Enrichment)** - GO annotation of the _P. astreoides_ genome was retrieved from the [Past_Genome Project](https://osf.io/ed8xu/). GO enrichment analysis was performed for both the DE and WGCNA data using the package Goseq (v1.42.0; [Young et al. 2010](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-2-r14)) in the R environment.  
