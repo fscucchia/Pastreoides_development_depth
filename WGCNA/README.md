@@ -868,7 +868,51 @@ names(GSPvalue) = paste("p.GS.", names(group), sep="")
 annot_final <- read.csv("Past_annot.csv", header = TRUE, sep = ",")[,-1]
 GO.annot <- subset(annot_final, select= c(SeqName, Length, GO_IDs)) #Select only relevant information
 
-        
+names(GO.annot)[1] <- "gene_id" #rename column
+names(GO.annot)[2] <- "length"
+
+#Match up genes in datExpr to annotation file
+names(GO.annot)
+probes = names(datExpr)
+probes2annot = match(probes, GO.annot$gene_id)
+# The following is the number of probes without annotation... Should return 0.
+sum(is.na(probes2annot))
+
+#Create the starting data frame
+geneInfo0 = data.frame(gene_id = probes,
+Annotation.GO.ID = GO.annot$GO_IDs[probes2annot],
+moduleColor = moduleColors,
+geneTraitSignificance,
+GSPvalue)
+
+#Order modules by their significance for time_point
+modOrder = order(-abs(cor(MEs, group, use = "p")))
+
+#Add module membership information in the chosen order
+for (mod in 1:ncol(geneModuleMembership))
+{
+oldNames = names(geneInfo0)
+geneInfo0 = data.frame(geneInfo0, geneModuleMembership[, modOrder[mod]],
+MMPvalue[, modOrder[mod]]);
+names(geneInfo0) = c(oldNames, paste("MM.", modNames[modOrder[mod]], sep=""),
+paste("p.MM.", modNames[modOrder[mod]], sep=""))
+}
+
+#Order the genes in the geneInfo variable first by module color, then by geneTraitSignificance
+geneOrder = order(geneInfo0$moduleColor, -abs(geneInfo0$GS.group));
+geneInfo = geneInfo0[geneOrder, ]
+head(geneInfo)
+
+#Add module cluster in geneInfo
+geneInfo <- left_join(geneInfo, moduleCluster, by = "moduleColor")
+dim(geneInfo)
+head(geneInfo)
+
+#Save geneInfo as a CSV
+geneInfo$Annotation.GO.ID <- gsub(";NA", "", geneInfo$Annotation.GO.ID) #Remove NAs
+geneInfo$Annotation.GO.ID <- gsub("NA", "", geneInfo$Annotation.GO.ID) #Remove NAs
+write.csv(geneInfo, file = "geneInfo.csv")
+```        
         
         
         
