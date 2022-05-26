@@ -7,3 +7,22 @@
 setwd("C:/Federica/Clean_workspace/Bermuda_scripts/Enrichment")
 
 #Load libraries
+
+library(goseq)
+library(tidyverse)
+library(GSEABase)               #BiocManager::install("GSEABase")
+library(data.table)
+library(ggplot2)
+library(cowplot)                #install.packages("cowplot")
+library(patchwork)
+library(dplyr)
+library(tidyr)
+
+#treatment information
+treatmentinfo <- read.csv("RNAseq_data.csv", header = TRUE, sep = ";")
+str(treatmentinfo)
+head(treatmentinfo)
+
+#gene count matrix
+gcount <- as.data.frame(read.csv("gene_count_matrix.csv", row.names="gene_id"))
+gcount$gene_id <- rownames(gcount)
