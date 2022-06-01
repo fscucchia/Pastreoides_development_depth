@@ -2,7 +2,7 @@
 
 This electronic notebook provides the scripts employed to analyze gene expression dynamics across developmental stages (planulae and adults) of the coral _Porites astreoides_ inhabiting shallow (10 m) and mesophotic (45 m) reefs in Bermuda.
 
-![pic]([https://github.com/fscucchia/Spistillata_OA_Shallow_and_Mesophotic/blob/main/media/Shallow_and_Mesophotic_pictures.jpg) 
+![pic](https://github.com/fscucchia/Spistillata_OA_Shallow_and_Mesophotic/blob/main/media/Shallow_and_Mesophotic_pictures.jpg) 
 
 ### RNA-Seq reads quality filtering and mapping
 
