@@ -1,0 +1,10 @@
+category;genes;over_represented_pvalue;under_represented_pvalue;numDEInCat;numInCat;term;ontology
+GO:0016525;Pastreoides47035, Pastreoides47036;-0.004871739;0.999888865;2;5;negative regulation of angiogenesis;BP
+GO:0016702;Pastreoides52390, Pastreoides43380;-0.003006457;0.99995388;2;4;oxidoreductase activity, acting on single donors with incorporation of molecular oxygen, incorporation of two atoms of oxygen;MF
+GO:0006518;Pastreoides02090, Pastreoides02091;-0.000498198;1;2;2;peptide metabolic process;BP
+GO:0046373;Pastreoides09358, Pastreoides43782, Pastreoides43783, Pastreoides09317, Pastreoides09318;-0.0000163;0.999999367;5;15;L-arabinose metabolic process;BP
+GO:0046556;Pastreoides09358, Pastreoides43782, Pastreoides43783, Pastreoides09317, Pastreoides09318;-0.0000163;0.999999367;5;15;alpha-L-arabinofuranosidase activity;MF
+GO:0006478;Pastreoides10329, Pastreoides10367, Pastreoides28926, Pastreoides34043, Pastreoides34051;-0.00000278;0.999999935;5;11;peptidyl-tyrosine sulfation;BP
+GO:0042151;Pastreoides10444, Pastreoides10537, Pastreoides10841, Pastreoides10842, Pastreoides10843, Pastreoides10844, Pastreoides10847, Pastreoides09317, Pastreoides09318;-0.00000038;0.999999971;9;42;nematocyst;CC
+GO:0090729;Pastreoides10444, Pastreoides10537, Pastreoides10841, Pastreoides10842, Pastreoides10843, Pastreoides10844, Pastreoides10847, Pastreoides09317, Pastreoides09318;-0.000000194;0.999999987;9;39;toxin activity;MF
+GO:0005576;Pastreoides22606, Pastreoides22538, Pastreoides35512, Pastreoides21757, Pastreoides06004, Pastreoides06037, Pastreoides06002, Pastreoides47132, Pastreoides48916, Pastreoides10444, Pastreoides10537, Pastreoides10841, Pastreoides10842, Pastreoides10843, Pastreoides10844, Pastreoides10847, Pastreoides41505, Pastreoides28914, Pastreoides30211, Pastreoides56650, Pastreoides35426, Pastreoides09317, Pastreoides09318;-1.06E-12;1;23;154;extracellular region;CC
