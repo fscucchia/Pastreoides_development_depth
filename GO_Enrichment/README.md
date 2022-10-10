@@ -283,7 +283,7 @@ cluster5.GO.05$term <- as.factor(cluster5.GO.05$term)
 dim(cluster5.GO.05) #Number of sig GO terms
 
 #Save significant terms
-write.csv(cluster5.GO.05, file = "GO.05.cluster5.csv", row.names = FALSE)
+write.csv(cluster5.GO.05, file = "GO_WGCNA_cluster5.csv", row.names = FALSE)
 
 ####### Cluster 7 ######
 cluster7_gene.vector <- as.vector(genes_clust7.GO$gene_id)
@@ -330,5 +330,5 @@ cluster7.GO.05$term <- as.factor(cluster7.GO.05$term)
 dim(cluster7.GO.05) #Number of sig GO terms
 
 #Save significant terms
-write.csv(cluster7.GO.05, file = "GO.05.cluster7.csv", row.names = FALSE)
+write.csv(cluster7.GO.05, file = "GO_WGCNA_cluster7.csv", row.names = FALSE)
 ```
