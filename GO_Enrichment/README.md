@@ -119,7 +119,7 @@ C2.GO.sigp_adults$term <- as.factor(C2.GO.sigp_adults$term)
 ###Save significant terms
 write.csv(C1.GO.sigp_adults, "C1.GO.sigp_adults.csv", row.names = FALSE)
 write.csv(C2.GO.sigp_adults, file = "C2.GO.sigp_adults.csv", row.names = FALSE)
-
+#the file in this repository named "GO_DEGs_adults_full" contains the list of all enriched GOs (up and down)
 
 ## DESeq2 result - PLANULAE
 DEG.res <- read.csv("DEGs_planulae_cluster.csv", header = TRUE, sep = "," )[,-1]
@@ -175,6 +175,7 @@ C2.GO.sigp_planulae$term <- as.factor(C2.GO.sigp_planulae$term)
 ###Save significant terms
 write.csv(C1.GO.sigp_planulae, "C1.GO.sigp_planulae.csv", row.names = FALSE)
 write.csv(C2.GO.sigp_planulae, file = "C2.GO.sigp_planulae.csv", row.names = FALSE)
+#the file in this repository named "GO_DEGs_planulae_full" contains the list of all enriched GOs (up and down)
 ```
 
 ### GO Enrichment - WGCNA Data 
