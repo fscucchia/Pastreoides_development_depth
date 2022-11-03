@@ -8,7 +8,7 @@ design_factor_levels=c("adult_meso","planu_meso", "adult_shal", "planu_shal")
 design_sample='sample'
 
 cols1=c('query' ,'subject',	'identity','alignment_length','mismatches','gap_openings','query_start','query_end','subject_start','subject_end','E_value','bit_score')
-clades_pattern=c('^([Ss]ymb|[Cc]ladocopium)(.*)','^(?!([Ss]ymb|[Cc]ladocopium))(.*)')
+clades_pattern=c('^([Ss]ymb|[Cc]ladocopium|[Ss]mic|[Ss]lin|[Ss]nat|[Ss]nec|[Ss]tri)(.*)','^(?!([Ss]ymb|[Cc]ladocopium|[Ss]mic|[Ss]lin|[Ss]nat|[Ss]nec|[Ss]tri))(.*)')
 clades_name=c('Symbiodinium','Metazoa')
 outidx='/data/home/mass/fscucchia/Bermuda/output/Diamond/heatmap'
 
