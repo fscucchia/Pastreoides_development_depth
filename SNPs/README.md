@@ -87,6 +87,7 @@ This is to distinguish between deletions in exons and large skips due to introns
 
 ### 06- HaplotypeCaller
 Run script [`HaplotypeCaller.sh`](https://github.com/fscucchia/Pastreoides_development_depth/blob/main/SNPs/HaplotypeCaller.sh). _Took 21 hours_.
+
 This assumes:  
 --sample-ploidy 2 (default)  
 --heterozygosity 0.001 (deafult; dont have prior info to update this with)
