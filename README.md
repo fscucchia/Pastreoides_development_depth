@@ -1,6 +1,8 @@
-# Genetic and morphological similarities between shallow and mesophotic Porites astreoides corals support the Deep Reef Refugia Hypothesis for this species in Bermuda
+# Morphological and genetic mechanisms underlying the plasticity of the coral _Porites astreoides_ across depths in Bermuda
 
-This electronic notebook provides the scripts employed to analyze gene expression dynamics across developmental stages (planulae and adults) of the coral _Porites astreoides_ inhabiting shallow (10 m) and mesophotic (45 m) reefs in Bermuda.
+This electronic notebook provides the scripts employed to analyze gene expression dynamics across developmental stages (planulae and adults) of the coral _Porites astreoides_ inhabiting shallow (10 m) and mesophotic (45 m) reefs in Bermuda. [![DOI:10.1016/j.jsb.2023.108036](http://img.shields.io/badge/DOI-10.1016/j.jsb.2023.108036-blue)](https://doi.org/10.1016/j.jsb.2023.108036)  
+
+Published in [The Journal of Structural Biology](https://doi.org/10.1016/j.jsb.2023.108036).
 
 <p align="center">
 <img src="https://github.com/fscucchia/Pastreoides_development_depth/blob/main/media/Shallow%20and%20Mesophotic%20adults.jpg" width="700"/>
